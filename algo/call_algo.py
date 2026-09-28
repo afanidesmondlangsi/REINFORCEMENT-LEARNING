@@ -3,16 +3,18 @@
 def call_algo(algo_name, config, mode, device):
     if mode == 0:
         algo_name = algo_name.lower()
-        assert algo_name in ['sac', 'darc', 'vgdf', 'sac_iw', 'par']
+        assert algo_name in ['sac', 'sac_target_only', 'darc', 'vgdf', 'sac_iw', 'par']
         # online online setting
         from online_online.darc import DARC
         from online_online.sac import SAC
+        from online_online.sac_target_only import SACTargetOnly
         from online_online.vgdf import VGDF
         from online_online.sac_iw import SAC_IW
         from online_online.par import PAR
 
         algo_to_call = {
             'sac': SAC,
+            'sac_target_only': SACTargetOnly,
             'darc': DARC,
             'vgdf': VGDF,
             'sac_iw': SAC_IW,

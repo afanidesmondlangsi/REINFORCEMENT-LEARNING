@@ -244,7 +244,149 @@ if __name__ == "__main__":
     eval_tar_return = eval_policy(policy, tar_eval_env, eval_cnt=eval_cnt)
     eval_cnt += 1
 
-    if args.mode == 0:
+
+        # ============================================================
+    # CONDITION A: TARGET-ONLY SAC
+    # ============================================================
+    if args.mode == 0 and args.policy.lower() == 'sac_target_only':
+
+        tar_state, tar_done = tar_env.reset(), False
+        tar_episode_reward = 0
+        tar_episode_timesteps = 0
+        tar_episode_num = 0
+
+        for t in range(int(config['max_step'])):
+
+            # Interact ONLY with the target environment
+            if t % config['tar_env_interact_interval'] == 0:
+
+                tar_episode_timesteps += 1
+
+                tar_action = policy.select_action(
+                    np.array(tar_state),
+                    test=False
+                )
+
+                tar_next_state, tar_reward, tar_done, _ = tar_env.step(
+                    tar_action
+                )
+
+                tar_done_bool = (
+                    float(tar_done)
+                    if tar_episode_timesteps < tar_env._max_episode_steps
+                    else 0
+                )
+
+                if 'antmaze' in args.env:
+                    tar_reward -= 1.0
+
+                tar_replay_buffer.add(
+                    tar_state,
+                    tar_action,
+                    tar_next_state,
+                    tar_reward,
+                    tar_done_bool
+                )
+
+                tar_state = tar_next_state
+                tar_episode_reward += tar_reward
+
+                if tar_done:
+
+                    print(
+                        "Total T: {} Episode Num: {} Episode T: {} Reward: {}".format(
+                            t + 1,
+                            tar_episode_num + 1,
+                            tar_episode_timesteps,
+                            tar_episode_reward
+                        )
+                    )
+
+                    writer.add_scalar(
+                        'train/target return',
+                        tar_episode_reward,
+                        global_step=t + 1
+                    )
+
+                    train_normalized_score = get_normalized_score(
+                        tar_episode_reward,
+                        ref_env_name
+                    )
+
+                    writer.add_scalar(
+                        'train/target normalized score',
+                        train_normalized_score,
+                        global_step=t + 1
+                    )
+
+                    tar_state, tar_done = tar_env.reset(), False
+                    tar_episode_reward = 0
+                    tar_episode_timesteps = 0
+                    tar_episode_num += 1
+
+            # Train using target data only.
+            # SACTargetOnly ignores src_replay_buffer.
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config['batch_size'],
+                writer
+            )
+    
+
+            # Evaluation
+            if (t + 1) % config['eval_freq'] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    'test/source return',
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    'test/target return',
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = get_normalized_score(
+                    tar_eval_return,
+                    ref_env_name
+                )
+
+                writer.add_scalar(
+                    'test/target normalized score',
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+                    policy.save('{}/models/model'.format(outdir))
+
+
+    # ============================================================
+    # ORIGINAL MODE 0: ONLINE SOURCE + ONLINE TARGET
+    # ============================================================
+    elif args.mode == 0:
+
+        # online-online learning
+
+        src_state, src_done = src_env.reset(), False
+        tar_state, tar_done = tar_env.reset(), False
         # online-online learning
 
         src_state, src_done = src_env.reset(), False
