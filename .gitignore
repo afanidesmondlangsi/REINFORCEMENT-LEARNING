@@ -2,3 +2,11 @@
 # Python cache
 __pycache__/
 *.pyc
+
+# Local temporary and backup files
+powershell_commands.txt
+powershell_session_history.xml
+target_only_smoke/
+test_runs/
+train_before_target_only.py
+train_original_backup.py
