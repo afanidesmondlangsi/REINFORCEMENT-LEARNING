@@ -10,3 +10,19 @@ target_only_smoke/
 test_runs/
 train_before_target_only.py
 train_original_backup.py
+# ============================================================
+# RQ2 generated experiment data
+# ============================================================
+
+rq2_generalization/
+rq2_smoke/
+
+# Local experiment logs
+*.log
+
+# Backup files
+*_backup_*.py
+
+# Python cache
+__pycache__/
+*.pyc
