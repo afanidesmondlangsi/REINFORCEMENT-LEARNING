@@ -26,3 +26,4 @@ rq2_smoke/
 # Python cache
 __pycache__/
 *.pycrq2_halfcheetah_log.txt
+rq2_halfcheetah_log.txt
