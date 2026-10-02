@@ -204,7 +204,7 @@ class BCPAR(object):
                 value_target = reward_batch + not_done_batch * self.discount * q_target
 
         q_1, q_2 = self.q_funcs(state_batch, action_batch)
-        if writer is not None and self.total_it % 5000 == 0:
+        if writer is not None and self.total_it % 1000 == 0:
             writer.add_scalar('train/q1', q_1.mean(), self.total_it)
             writer.add_scalar('train/logprob', logprobs_batch.mean(), self.total_it)
         loss = F.mse_loss(q_1, value_target) + F.mse_loss(q_2, value_target)
@@ -234,7 +234,7 @@ class BCPAR(object):
         encoder_loss.backward()
         self.encoder_optimizer.step()
 
-        if writer is not None and self.total_it % 5000 == 0:
+        if writer is not None and self.total_it % 1000 == 0:
             writer.add_scalar('train/encoder loss', encoder_loss, global_step=self.total_it)
 
 
@@ -264,7 +264,7 @@ class BCPAR(object):
         
         src_reward -= self.config['beta'] * distance
 
-        if writer is not None and self.total_it % 5000 == 0:
+        if writer is not None and self.total_it % 1000 == 0:
             writer.add_scalar('train/distance', distance.mean(), self.total_it)
             writer.add_scalar('train/src reward', src_reward.mean(), self.total_it)
         
