@@ -478,7 +478,7 @@ if __name__ == "__main__":
                 tar_action = policy.select_action(np.array(tar_state), test=False)
 
                 tar_next_state, tar_reward, tar_done, _ = tar_env.step(tar_action)
-                tar_done_bool = float(tar_done) if tar_episode_timesteps < src_eval_env._max_episode_steps else 0
+                tar_done_bool = float(tar_done) if tar_episode_timesteps < tar_env._max_episode_steps else 0
 
                 if 'antmaze' in args.env:
                     tar_reward -= 1.0
