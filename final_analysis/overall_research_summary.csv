@@ -1,0 +1,4 @@
+research_question,main_test,primary_result,key_value,interpretation
+RQ1,Offline source data vs target-only learning,BC-SAC positive AUC transfer in 4/4 environments,13226.076744496824,"Offline source data were useful overall under BC-SAC, while early benefits were environment-dependent."
+RQ2,Cross-environment transfer at friction shifts 0.5 and 2.0,BC-SAC positive transfer in 8/8 conditions,3.7312254251058525,BC-SAC showed the most consistent cross-task generalization.
+RQ3,Relatedness-aware adaptation across four environments and four nominal shifts,BC-SAC 10 wins; BC-PAR 4; RLPD 2,-0.0556975123844895,BC-PAR was explicitly relatedness-aware but its learned distance did not reliably predict performance advantage.

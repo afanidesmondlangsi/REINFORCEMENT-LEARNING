@@ -1,0 +1,3 @@
+algorithm,positive_conditions,negative_conditions,zero_conditions,total_conditions,positive_fraction,mean_delta,median_delta
+BC_SAC,8,0,0,8,1.0,3.731225425105853,3.319627607241273
+RLPD,2,6,0,8,0.25,-0.2937504280756304,-0.3880032796102264
