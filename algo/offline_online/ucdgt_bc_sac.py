@@ -65,6 +65,36 @@ class UCDGTBCSAC(BCSAC):
         self.ucdgt_ready = False
         self.ucdgt_dynamics_updates = 0
 
+        # Periodic target-dynamics adaptation.
+        self.ucdgt_update_interval = int(
+            config.get("ucdgt_update_interval", 1000)
+        )
+        self.ucdgt_update_steps = int(
+            config.get("ucdgt_update_steps", 50)
+        )
+        self.ucdgt_update_window = int(
+            config.get("ucdgt_update_window", 2000)
+        )
+
+        if self.ucdgt_update_interval < 1:
+            raise ValueError("ucdgt_update_interval must be positive")
+        if self.ucdgt_update_steps < 1:
+            raise ValueError("ucdgt_update_steps must be positive")
+        if self.ucdgt_update_window < 1:
+            raise ValueError("ucdgt_update_window must be positive")
+
+        self.ucdgt_last_update_size = 0
+        self.ucdgt_refresh_count = 0
+
+        # Reserve the initial calibration set for future refreshes.
+        self.ucdgt_calibration_indices = None
+        self.ucdgt_calibration_data = None
+
+        # Monotonic insertion count, independent of replay-buffer size.
+        self.ucdgt_target_insertions = 0
+        self.ucdgt_last_observed_ptr = None
+        self.ucdgt_last_observed_size = None
+
     def _initialize_ucdgt(self, tar_replay_buffer):
         """
         Initialize dynamics from a fixed snapshot of
@@ -88,6 +118,9 @@ class UCDGTBCSAC(BCSAC):
 
         train_indices = indices[n_cal:]
         cal_indices = indices[:n_cal]
+
+        # Never include these initial indices in dynamics training.
+        self.ucdgt_calibration_indices = cal_indices.copy()
 
         def tensor(data, idx):
             return torch.as_tensor(
@@ -147,6 +180,13 @@ class UCDGTBCSAC(BCSAC):
 
             self.ucdgt_dynamics_updates += 1
 
+        # Snapshot held-out transitions before replay-buffer wraparound.
+        self.ucdgt_calibration_data = (
+            cal_state.detach().clone(),
+            cal_action.detach().clone(),
+            cal_next_state.detach().clone(),
+        )
+
         self.ucdgt.calibrate(
             cal_state,
             cal_action,
@@ -154,6 +194,10 @@ class UCDGTBCSAC(BCSAC):
         )
 
         self.ucdgt_ready = True
+        self.ucdgt_last_update_size = tar_replay_buffer.size
+        self.ucdgt_target_insertions = tar_replay_buffer.size
+        self.ucdgt_last_observed_ptr = tar_replay_buffer.ptr
+        self.ucdgt_last_observed_size = tar_replay_buffer.size
 
         print(
             "UCDGT initialized | "
@@ -162,6 +206,115 @@ class UCDGTBCSAC(BCSAC):
             f"dynamics updates="
             f"{self.ucdgt_dynamics_updates}"
         )
+
+    def _refresh_ucdgt(self, tar_replay_buffer, writer=None):
+        """Update the existing ensemble after enough NEW target insertions.
+
+        Assumes fewer than max_size insertions between calls (the current
+        offline-online train loop inserts at most one per call).
+        """
+        if not self.ucdgt_ready:
+            return False
+
+        size = int(tar_replay_buffer.size)
+        capacity = int(tar_replay_buffer.max_size)
+        ptr = int(tar_replay_buffer.ptr)
+        if capacity < 1 or not 0 <= ptr < capacity:
+            raise ValueError("Invalid target replay-buffer capacity/pointer")
+
+        if self.ucdgt_last_observed_ptr is None:
+            raise RuntimeError("UCDGT insertion tracking was not initialized")
+
+        previous_size = self.ucdgt_last_observed_size
+        previous_ptr = self.ucdgt_last_observed_ptr
+        if size < previous_size and previous_size < capacity:
+            raise RuntimeError("Target replay-buffer size unexpectedly decreased")
+
+        if previous_size < capacity and size < capacity:
+            inserted = size - previous_size
+        else:
+            inserted = (ptr - previous_ptr) % capacity
+            if previous_size < capacity:
+                # Transition from partially filled to full buffer.
+                inserted = size - previous_size
+
+        if inserted < 0:
+            raise RuntimeError("Target replay-buffer insertion count decreased")
+
+        self.ucdgt_target_insertions += inserted
+        self.ucdgt_last_observed_ptr = ptr
+        self.ucdgt_last_observed_size = size
+
+        if (self.ucdgt_target_insertions - self.ucdgt_last_update_size
+                < self.ucdgt_update_interval):
+            return False
+
+        window = min(size, self.ucdgt_update_window)
+        # Most recent first, correct both before and after wraparound.
+        indices = (ptr - 1 - np.arange(window, dtype=np.int64)) % capacity
+
+        # The initial held-out observations were inserted at indices < warmup.
+        # An index is excluded only until its original transition is overwritten.
+        reserved = self.ucdgt_calibration_indices
+        if reserved is not None and len(reserved):
+            original_still_present = (
+                self.ucdgt_target_insertions <= capacity + reserved
+            )
+            active_reserved = reserved[original_still_present]
+            indices = indices[~np.isin(indices, active_reserved)]
+
+        if len(indices) == 0:
+            return False
+
+        def tensor(data):
+            return torch.as_tensor(
+                data[indices], dtype=torch.float32, device=self.device
+            )
+
+        train_state = tensor(tar_replay_buffer.state)
+        train_action = tensor(tar_replay_buffer.action)
+        train_next_state = tensor(tar_replay_buffer.next_state)
+        n_train = len(indices)
+        batch_size = min(128, n_train)
+
+        # Retain fixed normalization and existing ensemble/optimizer state.
+        for _ in range(self.ucdgt_update_steps):
+            sampled = torch.randint(
+                0, n_train, (batch_size,), device=self.device
+            )
+            self.ucdgt.train_dynamics(
+                train_state[sampled],
+                train_action[sampled],
+                train_next_state[sampled],
+            )
+            self.ucdgt_dynamics_updates += 1
+
+        # train_dynamics invalidates calibration; restore it before gating.
+        self.ucdgt.calibrate(*self.ucdgt_calibration_data)
+        self.ucdgt_last_update_size = self.ucdgt_target_insertions
+        self.ucdgt_refresh_count += 1
+
+        if writer is not None:
+            writer.add_scalar(
+                "ucdgt/refresh_count", self.ucdgt_refresh_count, self.total_it
+            )
+            writer.add_scalar(
+                "ucdgt/dynamics_updates", self.ucdgt_dynamics_updates,
+                self.total_it,
+            )
+            writer.add_scalar(
+                "ucdgt/target_insertions", self.ucdgt_target_insertions,
+                self.total_it,
+            )
+
+        print(
+            "UCDGT refreshed | "
+            f"target transitions={self.ucdgt_target_insertions} | "
+            f"training transitions={n_train} | "
+            f"refresh count={self.ucdgt_refresh_count} | "
+            f"dynamics updates={self.ucdgt_dynamics_updates}"
+        )
+        return True
 
     def _source_weights(
         self,
@@ -318,6 +471,8 @@ class UCDGTBCSAC(BCSAC):
             return
 
         self._initialize_ucdgt(tar_replay_buffer)
+        if self.ucdgt_ready:
+            self._refresh_ucdgt(tar_replay_buffer, writer)
 
         tar_state, tar_action, tar_next_state, \
             tar_reward, tar_not_done = (
