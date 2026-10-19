@@ -1,9 +1,11 @@
+
 # import all algorithms this benchmark implement
 
 def call_algo(algo_name, config, mode, device):
     if mode == 0:
         algo_name = algo_name.lower()
         assert algo_name in ['sac', 'sac_target_only', 'darc', 'vgdf', 'sac_iw', 'par']
+
         # online online setting
         from online_online.darc import DARC
         from online_online.sac import SAC
@@ -26,24 +28,40 @@ def call_algo(algo_name, config, mode, device):
 
     elif mode == 1:
         algo_name = algo_name.lower()
-        assert algo_name in ['cql_sac', 'bc_vgdf', 'bc_sac', 'h2o', 'mcq_sac', 'rlpd', 'bc_par']
+
+        assert algo_name in [
+            'cql_sac',
+            'bc_vgdf',
+            'bc_sac',
+            'ucdgt_bc_sac',
+            'h2o',
+            'mcq_sac',
+            'rlpd',
+            'bc_par',
+            'bc_par_no_penalty',
+        ]
+
         # offline online setting
         from offline_online.cql_sac import CQLSAC
         from offline_online.bc_vgdf import BCVGDF
         from offline_online.bc_sac import BCSAC
+        from offline_online.ucdgt_bc_sac import UCDGTBCSAC
         from offline_online.mcq_sac import MCQSAC
         from offline_online.h2o import H2O
         from offline_online.rlpd import RLPD
         from offline_online.bc_par import BCPAR
+        from offline_online.bc_par_no_penalty import BCPARNoPenalty
 
         algo_to_call = {
             'cql_sac': CQLSAC,
             'bc_vgdf': BCVGDF,
             'bc_sac': BCSAC,
+            'ucdgt_bc_sac': UCDGTBCSAC,
             'mcq_sac': MCQSAC,
             'h2o': H2O,
             'rlpd': RLPD,
             'bc_par': BCPAR,
+            'bc_par_no_penalty': BCPARNoPenalty,
         }
 
         algo = algo_to_call[algo_name]
@@ -52,6 +70,7 @@ def call_algo(algo_name, config, mode, device):
     elif mode == 2:
         algo_name = algo_name.lower()
         assert algo_name in ['sac_bc', 'h2o', 'sac_cql', 'sac_mcq', 'par_bc']
+
         # online offline setting
         from online_offline.sac_bc import SACBC
         from online_offline.h2o import H2O
@@ -66,12 +85,14 @@ def call_algo(algo_name, config, mode, device):
             'sac_mcq': SACMCQ,
             'par_bc': PARBC,
         }
+
         algo = algo_to_call[algo_name]
         policy = algo(config, device)
 
     elif mode == 3:
         algo_name = algo_name.lower()
         assert algo_name in ['dara', 'bosa', 'iql', 'td3_bc', 'igdf']
+
         # offline offline setting
         from offline_offline.dara import DARA
         from offline_offline.bosa import BOSA
@@ -89,5 +110,5 @@ def call_algo(algo_name, config, mode, device):
 
         algo = algo_to_call[algo_name]
         policy = algo(config, device)
-    
+
     return policy
