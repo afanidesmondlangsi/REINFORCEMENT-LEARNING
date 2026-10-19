@@ -37,6 +37,17 @@ class UCDGTBCSAC(BCSAC):
             config.get("ucdgt_gate_actor", True)
         )
 
+        # Ablation controls; defaults preserve the full UCDGT algorithm.
+        self.ucdgt_enable_refresh = config.get(
+            "ucdgt_enable_refresh", True
+        )
+        self.ucdgt_enable_uncertainty = config.get(
+            "ucdgt_enable_uncertainty", True
+        )
+        for name in ("ucdgt_enable_refresh", "ucdgt_enable_uncertainty"):
+            if not isinstance(getattr(self, name), bool):
+                raise ValueError(f"{name} must be a boolean (true/false)")
+
         if self.ucdgt_warmup < 2:
             raise ValueError(
                 "ucdgt_warmup must be at least 2"
@@ -353,9 +364,12 @@ class UCDGTBCSAC(BCSAC):
                 relative_mismatch - 1.0
             )
 
-            uncertainty_penalty = torch.relu(
-                relative_uncertainty - 1.0
-            )
+            if self.ucdgt_enable_uncertainty:
+                uncertainty_penalty = torch.relu(
+                    relative_uncertainty - 1.0
+                )
+            else:
+                uncertainty_penalty = torch.zeros_like(mismatch_penalty)
 
             penalty = (
                 mismatch_penalty
@@ -471,7 +485,7 @@ class UCDGTBCSAC(BCSAC):
             return
 
         self._initialize_ucdgt(tar_replay_buffer)
-        if self.ucdgt_ready:
+        if self.ucdgt_ready and self.ucdgt_enable_refresh:
             self._refresh_ucdgt(tar_replay_buffer, writer)
 
         tar_state, tar_action, tar_next_state, \
