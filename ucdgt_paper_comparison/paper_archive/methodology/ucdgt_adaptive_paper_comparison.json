@@ -1,0 +1,23 @@
+{
+  "eval_freq": 10000,
+  "ucdgt_warmup": 256,
+  "ucdgt_train_steps": 20,
+  "ucdgt_cal_fraction": 0.2,
+  "ucdgt_ensemble_size": 3,
+  "ucdgt_dynamics_lr": 0.001,
+  "ucdgt_gate_tau": 10.0,
+  "ucdgt_source_scale": 1.0,
+  "ucdgt_gate_actor": true,
+  "ucdgt_enable_refresh": true,
+  "ucdgt_refresh_strategy": "adaptive",
+  "ucdgt_update_steps": 5,
+  "ucdgt_update_window": 128,
+  "ucdgt_adaptive_min_interval": 100,
+  "ucdgt_adaptive_max_interval": 300,
+  "ucdgt_adaptive_check_interval": 30,
+  "ucdgt_adaptive_validation_size": 64,
+  "ucdgt_adaptive_error_threshold": 0.1,
+  "ucdgt_match_validation_exclusion": false,
+  "ucdgt_refresh_subset_mode": "all",
+  "ucdgt_update_interval": 30
+}

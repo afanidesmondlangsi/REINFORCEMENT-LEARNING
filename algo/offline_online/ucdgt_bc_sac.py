@@ -97,6 +97,65 @@ class UCDGTBCSAC(BCSAC):
         self.ucdgt_last_update_size = 0
         self.ucdgt_refresh_count = 0
 
+        self.ucdgt_refresh_strategy = config.get(
+            "ucdgt_refresh_strategy", "periodic"
+        )
+        if self.ucdgt_refresh_strategy not in ("periodic", "adaptive"):
+            raise ValueError("Invalid UCDGT refresh strategy")
+
+        self.ucdgt_adaptive_min_interval = int(
+            config.get("ucdgt_adaptive_min_interval", 100)
+        )
+        self.ucdgt_adaptive_max_interval = int(
+            config.get("ucdgt_adaptive_max_interval", 300)
+        )
+        self.ucdgt_adaptive_check_interval = int(
+            config.get("ucdgt_adaptive_check_interval", 30)
+        )
+        self.ucdgt_adaptive_validation_size = int(
+            config.get("ucdgt_adaptive_validation_size", 64)
+        )
+        self.ucdgt_adaptive_error_threshold = float(
+            config.get("ucdgt_adaptive_error_threshold", 0.10)
+        )
+
+        if not (
+            1 <= self.ucdgt_adaptive_check_interval
+            <= self.ucdgt_adaptive_min_interval
+            <= self.ucdgt_adaptive_max_interval
+        ):
+            raise ValueError("Invalid adaptive refresh intervals")
+
+        if self.ucdgt_adaptive_validation_size < 1:
+            raise ValueError("Validation size must be positive")
+
+        if self.ucdgt_adaptive_error_threshold < 0:
+            raise ValueError("Error threshold must be nonnegative")
+
+        self.ucdgt_match_validation_exclusion = bool(
+            config.get("ucdgt_match_validation_exclusion", False)
+        )
+
+        self.ucdgt_refresh_subset_mode = config.get(
+            "ucdgt_refresh_subset_mode", "all"
+        )
+        self.ucdgt_refresh_subset_size = int(
+            config.get("ucdgt_refresh_subset_size", 64)
+        )
+
+        if self.ucdgt_refresh_subset_mode not in ("all", "random"):
+            raise ValueError("Invalid UCDGT refresh subset mode")
+
+        if self.ucdgt_refresh_subset_size < 1:
+            raise ValueError("UCDGT refresh subset size must be positive")
+
+        self.ucdgt_subset_rng = np.random.RandomState(
+            int(config.get("seed", 0)) + 73021
+        )
+
+        self.ucdgt_adaptive_last_check = 0
+        self.ucdgt_adaptive_excluded_indices = None
+
         # Reserve the initial calibration set for future refreshes.
         self.ucdgt_calibration_indices = None
         self.ucdgt_calibration_data = None
@@ -218,6 +277,172 @@ class UCDGTBCSAC(BCSAC):
             f"{self.ucdgt_dynamics_updates}"
         )
 
+    def _ucdgt_refresh_indices(self, tar_replay_buffer):
+        """Eligible recent transitions, excluding still-present calibration data.
+
+        Original calibration transitions are identified by their insertion slots.
+        A reserved slot becomes eligible once its original transition is overwritten.
+        """
+        size = int(tar_replay_buffer.size)
+        capacity = int(tar_replay_buffer.max_size)
+        ptr = int(tar_replay_buffer.ptr)
+        if capacity < 1 or not 0 <= size <= capacity or not 0 <= ptr < capacity:
+            raise ValueError("Invalid target replay-buffer size/capacity/pointer")
+
+        window = min(size, self.ucdgt_update_window)
+        indices = (ptr - 1 - np.arange(window, dtype=np.int64)) % capacity
+        reserved = self.ucdgt_calibration_indices
+        if reserved is not None and len(reserved):
+            reserved = np.asarray(reserved, dtype=np.int64)
+            # For an initially empty circular buffer, slot j is overwritten
+            # on insertion number capacity + j + 1.
+            still_present = self.ucdgt_target_insertions <= capacity + reserved
+            indices = indices[~np.isin(indices, reserved[still_present])]
+        if (
+            (
+                getattr(self, "ucdgt_refresh_strategy", "periodic") == "adaptive"
+                or getattr(
+                    self, "ucdgt_match_validation_exclusion", False
+                )
+            )
+            and self.ucdgt_adaptive_excluded_indices is not None
+        ):
+            indices = indices[
+                ~np.isin(
+                    indices,
+                    self.ucdgt_adaptive_excluded_indices
+                )
+            ]
+
+        return indices
+
+    def _ucdgt_select_refresh_subset(self, indices):
+        """Select refresh-training transitions without replacement."""
+        indices = np.asarray(indices, dtype=np.int64)
+
+        if getattr(self, "ucdgt_refresh_subset_mode", "all") != "random":
+            return indices
+
+        n = min(self.ucdgt_refresh_subset_size, len(indices))
+
+        if n == len(indices):
+            return indices
+
+        positions = self.ucdgt_subset_rng.choice(
+            len(indices), size=n, replace=False
+        )
+
+        return indices[positions]
+
+    def _ucdgt_should_adapt(self, tar_replay_buffer, writer=None):
+        since_refresh = (
+            self.ucdgt_target_insertions
+            - self.ucdgt_last_update_size
+        )
+
+        if since_refresh < self.ucdgt_adaptive_min_interval:
+            return False
+
+        if (
+            self.ucdgt_target_insertions
+            - self.ucdgt_adaptive_last_check
+            < self.ucdgt_adaptive_check_interval
+            and since_refresh < self.ucdgt_adaptive_max_interval
+        ):
+            return False
+
+        self.ucdgt_adaptive_last_check = self.ucdgt_target_insertions
+
+        size = int(tar_replay_buffer.size)
+        capacity = int(tar_replay_buffer.max_size)
+        ptr = int(tar_replay_buffer.ptr)
+
+        n = min(
+            self.ucdgt_adaptive_validation_size,
+            size,
+            since_refresh
+        )
+
+        if n < 1:
+            return False
+
+        recent = (
+            ptr - 1 - np.arange(n, dtype=np.int64)
+        ) % capacity
+
+        self.ucdgt_adaptive_excluded_indices = recent.copy()
+
+        def tensor(array):
+            return torch.as_tensor(
+                array[recent],
+                dtype=torch.float32,
+                device=self.device
+            )
+
+        with torch.no_grad():
+            recent_mismatch, _ = self.ucdgt.calculate_statistics(
+                tensor(tar_replay_buffer.state),
+                tensor(tar_replay_buffer.action),
+                tensor(tar_replay_buffer.next_state)
+            )
+
+            calibration_mismatch, _ = (
+                self.ucdgt.calculate_statistics(
+                    *self.ucdgt_calibration_data
+                )
+            )
+
+            recent_error = float(
+                recent_mismatch.mean().item()
+            )
+            calibration_error = float(
+                calibration_mismatch.mean().item()
+            )
+
+        ratio = recent_error / max(calibration_error, 1e-8)
+
+        forced = (
+            since_refresh >= self.ucdgt_adaptive_max_interval
+        )
+
+        triggered = (
+            ratio > 1.0 + self.ucdgt_adaptive_error_threshold
+        )
+
+        refresh = triggered or forced
+
+        if writer is not None:
+            writer.add_scalar(
+                "ucdgt/adaptive_recent_mismatch",
+                recent_error,
+                self.total_it
+            )
+            writer.add_scalar(
+                "ucdgt/adaptive_calibration_mismatch",
+                calibration_error,
+                self.total_it
+            )
+            writer.add_scalar(
+                "ucdgt/adaptive_error_ratio",
+                ratio,
+                self.total_it
+            )
+            writer.add_scalar(
+                "ucdgt/adaptive_trigger",
+                int(refresh),
+                self.total_it
+            )
+
+        print(
+            "UCDGT adaptive check | "
+            f"target transitions={self.ucdgt_target_insertions} | "
+            f"ratio={ratio:.4f} | "
+            f"forced={forced} | "
+            f"refresh={refresh}"
+        )
+
+        return refresh
+
     def _refresh_ucdgt(self, tar_replay_buffer, writer=None):
         """Update the existing ensemble after enough NEW target insertions.
 
@@ -256,23 +481,41 @@ class UCDGTBCSAC(BCSAC):
         self.ucdgt_last_observed_ptr = ptr
         self.ucdgt_last_observed_size = size
 
-        if (self.ucdgt_target_insertions - self.ucdgt_last_update_size
-                < self.ucdgt_update_interval):
+        if getattr(self, "ucdgt_refresh_strategy", "periodic") == "adaptive":
+            if not self._ucdgt_should_adapt(
+                tar_replay_buffer, writer
+            ):
+                return False
+        elif (
+            self.ucdgt_target_insertions
+            - self.ucdgt_last_update_size
+            < self.ucdgt_update_interval
+        ):
             return False
 
-        window = min(size, self.ucdgt_update_window)
-        # Most recent first, correct both before and after wraparound.
-        indices = (ptr - 1 - np.arange(window, dtype=np.int64)) % capacity
-
-        # The initial held-out observations were inserted at indices < warmup.
-        # An index is excluded only until its original transition is overwritten.
-        reserved = self.ucdgt_calibration_indices
-        if reserved is not None and len(reserved):
-            original_still_present = (
-                self.ucdgt_target_insertions <= capacity + reserved
+        # Matched periodic ablation: exclude the same number of
+        # recent validation transitions used by adaptive refresh.
+        if (
+            getattr(self, "ucdgt_refresh_strategy", "periodic") == "periodic"
+            and getattr(
+                self, "ucdgt_match_validation_exclusion", False
             )
-            active_reserved = reserved[original_still_present]
-            indices = indices[~np.isin(indices, active_reserved)]
+        ):
+            n_validation = min(
+                self.ucdgt_adaptive_validation_size,
+                size,
+                self.ucdgt_target_insertions
+                - self.ucdgt_last_update_size,
+            )
+
+            self.ucdgt_adaptive_excluded_indices = (
+                ptr - 1 - np.arange(
+                    n_validation, dtype=np.int64
+                )
+            ) % capacity
+
+        indices = self._ucdgt_refresh_indices(tar_replay_buffer)
+        indices = self._ucdgt_select_refresh_subset(indices)
 
         if len(indices) == 0:
             return False
@@ -303,6 +546,18 @@ class UCDGTBCSAC(BCSAC):
         # train_dynamics invalidates calibration; restore it before gating.
         self.ucdgt.calibrate(*self.ucdgt_calibration_data)
         self.ucdgt_last_update_size = self.ucdgt_target_insertions
+
+        if getattr(self, "ucdgt_refresh_strategy", "periodic") == "adaptive":
+            self.ucdgt_adaptive_last_check = (
+                self.ucdgt_target_insertions
+            )
+            self.ucdgt_adaptive_excluded_indices = None
+
+        if getattr(
+            self, "ucdgt_match_validation_exclusion", False
+        ):
+            self.ucdgt_adaptive_excluded_indices = None
+
         self.ucdgt_refresh_count += 1
 
         if writer is not None:
@@ -659,3 +914,17 @@ class UCDGTBCSAC(BCSAC):
                 src_weights.max().item(),
                 self.total_it,
             )
+            with torch.no_grad():
+                w = src_weights.detach().float().reshape(-1)
+                ess = w.sum().square() / w.square().sum().clamp_min(1e-12)
+                writer.add_scalar("ucdgt/source_weight_std", w.std(unbiased=False).item(), self.total_it)
+                writer.add_scalar("ucdgt/source_weight_ess", ess.item(), self.total_it)
+                writer.add_scalar("ucdgt/source_weight_ess_fraction", (ess / w.numel()).item(), self.total_it)
+                writer.add_scalar("ucdgt/source_weight_p10", torch.quantile(w, 0.10).item(), self.total_it)
+                writer.add_scalar("ucdgt/source_weight_p50", torch.quantile(w, 0.50).item(), self.total_it)
+                writer.add_scalar("ucdgt/source_weight_p90", torch.quantile(w, 0.90).item(), self.total_it)
+                mismatch, disagreement = self.ucdgt.calculate_statistics(
+                    src_state, src_action, src_next_state
+                )
+                writer.add_scalar("ucdgt/source_mismatch_mean", mismatch.float().mean().item(), self.total_it)
+                writer.add_scalar("ucdgt/source_uncertainty_mean", disagreement.float().mean().item(), self.total_it)

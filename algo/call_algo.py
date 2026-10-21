@@ -1,4 +1,4 @@
-
+﻿
 # import all algorithms this benchmark implement
 
 def call_algo(algo_name, config, mode, device):
@@ -34,6 +34,7 @@ def call_algo(algo_name, config, mode, device):
             'bc_vgdf',
             'bc_sac',
             'ucdgt_bc_sac',
+            'ucdgt_adaptive_tau',
             'h2o',
             'mcq_sac',
             'rlpd',
@@ -46,6 +47,7 @@ def call_algo(algo_name, config, mode, device):
         from offline_online.bc_vgdf import BCVGDF
         from offline_online.bc_sac import BCSAC
         from offline_online.ucdgt_bc_sac import UCDGTBCSAC
+        from offline_online.ucdgt_adaptive_tau import UCDGTAdaptiveTau
         from offline_online.mcq_sac import MCQSAC
         from offline_online.h2o import H2O
         from offline_online.rlpd import RLPD
@@ -57,6 +59,7 @@ def call_algo(algo_name, config, mode, device):
             'bc_vgdf': BCVGDF,
             'bc_sac': BCSAC,
             'ucdgt_bc_sac': UCDGTBCSAC,
+            'ucdgt_adaptive_tau': UCDGTAdaptiveTau,
             'mcq_sac': MCQSAC,
             'h2o': H2O,
             'rlpd': RLPD,
@@ -112,3 +115,4 @@ def call_algo(algo_name, config, mode, device):
         policy = algo(config, device)
 
     return policy
+

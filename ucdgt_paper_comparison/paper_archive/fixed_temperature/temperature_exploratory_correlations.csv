@@ -1,0 +1,7 @@
+environment,predictor,n,condition_adjusted_correlation
+halfcheetah-friction,source_weight_mean,18,-0.48688095087899724
+halfcheetah-friction,source_ess_fraction,18,-0.408565656359638
+halfcheetah-friction,refresh_count,18,0.6419702136996271
+hopper-friction,source_weight_mean,18,0.4251255351543335
+hopper-friction,source_ess_fraction,18,0.22497042278226467
+hopper-friction,refresh_count,18,0.42137514793810144

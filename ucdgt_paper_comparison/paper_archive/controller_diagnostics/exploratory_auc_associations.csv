@@ -1,0 +1,21 @@
+environment,variable,spearman_rho,n,interpretation
+ant-friction,final_tau,0.6571428571428573,6,Exploratory; shift may confound association
+ant-friction,mean_ess,-0.6571428571428573,6,Exploratory; shift may confound association
+ant-friction,ess_mae,-0.6571428571428573,6,Exploratory; shift may confound association
+ant-friction,tau_recorded_range,-0.7714285714285715,6,Exploratory; shift may confound association
+ant-friction,peak_to_final_drop,-0.7714285714285715,6,Exploratory; shift may confound association
+halfcheetah-friction,final_tau,0.3142857142857143,6,Exploratory; shift may confound association
+halfcheetah-friction,mean_ess,-0.3142857142857143,6,Exploratory; shift may confound association
+halfcheetah-friction,ess_mae,-0.3142857142857143,6,Exploratory; shift may confound association
+halfcheetah-friction,tau_recorded_range,-0.3714285714285715,6,Exploratory; shift may confound association
+halfcheetah-friction,peak_to_final_drop,1.0,6,Exploratory; shift may confound association
+hopper-friction,final_tau,0.6,6,Exploratory; shift may confound association
+hopper-friction,mean_ess,-0.6,6,Exploratory; shift may confound association
+hopper-friction,ess_mae,0.08571428571428573,6,Exploratory; shift may confound association
+hopper-friction,tau_recorded_range,0.2571428571428572,6,Exploratory; shift may confound association
+hopper-friction,peak_to_final_drop,-0.942857142857143,6,Exploratory; shift may confound association
+walker2d-friction,final_tau,0.028571428571428574,6,Exploratory; shift may confound association
+walker2d-friction,mean_ess,-0.028571428571428574,6,Exploratory; shift may confound association
+walker2d-friction,ess_mae,-0.028571428571428574,6,Exploratory; shift may confound association
+walker2d-friction,tau_recorded_range,-0.028571428571428574,6,Exploratory; shift may confound association
+walker2d-friction,peak_to_final_drop,0.942857142857143,6,Exploratory; shift may confound association

@@ -1,0 +1,13 @@
+environment,shift,fixed_tau,baseline_runs_found,seeds_found
+ant-friction,0.5,5.0,0,
+ant-friction,0.5,10.0,0,
+ant-friction,0.5,20.0,0,
+ant-friction,2.0,5.0,0,
+ant-friction,2.0,10.0,0,
+ant-friction,2.0,20.0,0,
+walker2d-friction,0.5,5.0,0,
+walker2d-friction,0.5,10.0,0,
+walker2d-friction,0.5,20.0,0,
+walker2d-friction,2.0,5.0,0,
+walker2d-friction,2.0,10.0,0,
+walker2d-friction,2.0,20.0,0,
