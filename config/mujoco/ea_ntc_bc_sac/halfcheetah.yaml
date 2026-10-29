@@ -48,3 +48,10 @@ ea_calibration_fraction: 0.20
 ea_gate_uncertainty: true
 ea_uncertainty_temperature: 1.0
 ea_uncertainty_min_reference: 0.000001
+
+# Phase 9: Calibration reliability
+ea_calibration_gap: 8
+
+# Dynamics model reliability safeguards
+ea_min_dynamics_updates: 20
+ea_max_calibration_error: 0.05

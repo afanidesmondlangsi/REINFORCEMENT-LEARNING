@@ -96,6 +96,17 @@ class EANTCBCSAC(BCSAC):
         self.ea_target_uncertainty_reference = None
         self.ea_last_uncertainty_penalty = None
 
+        # Fixed initial calibration block, separated from dynamics training.
+        self.ea_calibration_fraction = float(config.get("ea_calibration_fraction", 0.20))
+        self.ea_calibration_gap = int(config.get("ea_calibration_gap", 8))
+        if not 0.0 < self.ea_calibration_fraction < 0.5:
+            raise ValueError("ea_calibration_fraction must be between 0 and 0.5")
+        if self.ea_calibration_gap < 0:
+            raise ValueError("ea_calibration_gap must be nonnegative")
+        self.ea_last_calibration_count = 0
+        self.ea_last_training_count = 0
+        self.ea_last_effective_sample_size = None
+        self.ea_last_downweighted_fraction = None
         self.ea_last_weights = None
         self.ea_last_uncertainty = None
 
@@ -127,24 +138,29 @@ class EANTCBCSAC(BCSAC):
     def update_dynamics_and_calibration(
         self, tar_replay_buffer
     ):
-        """
-        Update dynamics using even-indexed target data.
-        Calibrate using odd-indexed target data.
+        """Train on later target transitions; calibrate on a fixed early block.
 
-        The gate is inactive until sufficient target
-        transitions have been collected and calibration
-        has succeeded.
+        The initial holdout never enters ensemble training. A temporal gap
+        reduces immediate adjacency, but does not remove trajectory dependence.
+        Replay-buffer wraparound is unsupported: fail rather than leak data.
         """
         if not self.ea_enabled:
             return
 
         size = int(tar_replay_buffer.size)
-
         if size < self.ea_warmup:
             return
+        if size >= int(tar_replay_buffer.max_size):
+            raise RuntimeError(
+                "EA-NTC fixed calibration holdout requires a non-wrapping "
+                "target replay buffer; increase max_size or redesign the split."
+            )
 
-        train_indices = np.arange(0, size, 2)
-        calibration_indices = np.arange(1, size, 2)
+        calibration_count = max(2, int(self.ea_warmup * self.ea_calibration_fraction))
+        calibration_indices = np.arange(0, calibration_count)
+        train_indices = np.arange(calibration_count + self.ea_calibration_gap, size)
+        self.ea_last_calibration_count = len(calibration_indices)
+        self.ea_last_training_count = len(train_indices)
 
         if (
             len(train_indices) < 2
@@ -398,6 +414,16 @@ class EANTCBCSAC(BCSAC):
         )
 
         self.ea_last_weights = weights.detach()
+        if self.ea_enabled:
+            with torch.no_grad():
+                total = weights.sum()
+                squared = weights.square().sum()
+                self.ea_last_effective_sample_size = (
+                    (total.square() / squared).item() if squared.item() > 0 else 0.0
+                )
+                self.ea_last_downweighted_fraction = (
+                    (weights < 0.5).float().mean().item()
+                )
 
         for p in self.q_funcs.parameters():
             p.requires_grad = False
@@ -423,6 +449,13 @@ class EANTCBCSAC(BCSAC):
         for p in self.q_funcs.parameters():
             p.requires_grad = True
 
+        if writer is not None and self.total_it % 100 == 0 and self.ea_enabled:
+            writer.add_scalar("ea_ntc/target_calibration_count", self.ea_last_calibration_count, self.total_it)
+            writer.add_scalar("ea_ntc/target_dynamics_train_count", self.ea_last_training_count, self.total_it)
+            writer.add_scalar("ea_ntc/source_weight_ess", self.ea_last_effective_sample_size, self.total_it)
+            writer.add_scalar("ea_ntc/source_weight_below_0_5", self.ea_last_downweighted_fraction, self.total_it)
+            if self.ea_last_calibration_error is not None:
+                writer.add_scalar("ea_ntc/heldout_target_mse", self.ea_last_calibration_error, self.total_it)
         if writer is not None and self.total_it % 100 == 0:
             writer.add_scalar(
                 "ea_ntc/mean_source_weight",
