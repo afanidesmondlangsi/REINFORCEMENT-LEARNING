@@ -11,7 +11,7 @@ from offline_online.ea_ntc.calibration import TargetErrorCalibrator
 
 class EANTCBCSAC(BCSAC):
     """
-    EA-NTC gate-only implementation.
+    EA-NTC optional mismatch and uncertainty gating.
 
     - Original BC-SAC critic update
     - Original SAC actor objective
@@ -85,6 +85,16 @@ class EANTCBCSAC(BCSAC):
         if not np.isfinite(self.ea_max_calibration_error) or self.ea_max_calibration_error <= 0:
             raise ValueError("ea_max_calibration_error must be finite and positive")
         self.ea_last_calibration_error = None
+        # Optional uncertainty ablation; disabled by default to preserve Phase 7.
+        self.ea_uncertainty_enabled = bool(config.get("ea_gate_uncertainty", False))
+        self.ea_uncertainty_temperature = float(config.get("ea_uncertainty_temperature", 1.0))
+        self.ea_uncertainty_min_reference = float(config.get("ea_uncertainty_min_reference", 1e-6))
+        if not np.isfinite(self.ea_uncertainty_temperature) or self.ea_uncertainty_temperature <= 0:
+            raise ValueError("ea_uncertainty_temperature must be finite and positive")
+        if not np.isfinite(self.ea_uncertainty_min_reference) or self.ea_uncertainty_min_reference <= 0:
+            raise ValueError("ea_uncertainty_min_reference must be finite and positive")
+        self.ea_target_uncertainty_reference = None
+        self.ea_last_uncertainty_penalty = None
 
         self.ea_last_weights = None
         self.ea_last_uncertainty = None
@@ -186,6 +196,16 @@ class EANTCBCSAC(BCSAC):
             )
 
             self.calibrator.fit(errors)
+            # Calibrate uncertainty on the same held-out target partition.
+            # Clamp only the reference, not individual uncertainty measurements.
+            if not torch.isfinite(uncertainty).all() or torch.any(uncertainty < 0):
+                self.ea_target_uncertainty_reference = None
+                self.ea_gate_ready = False
+                return
+            self.ea_target_uncertainty_reference = max(
+                torch.median(uncertainty.reshape(-1)).item(),
+                self.ea_uncertainty_min_reference,
+            )
             heldout_error = errors.mean().item()
             self.ea_last_calibration_error = heldout_error
             self.ea_gate_ready = (
@@ -214,6 +234,19 @@ class EANTCBCSAC(BCSAC):
         )
 
         weights = self.calibrator.weights(mismatch)
+        self.ea_last_uncertainty_penalty = None
+        if self.ea_uncertainty_enabled:
+            reference = self.ea_target_uncertainty_reference
+            if reference is None:
+                # Conservative abstention if uncertainty was never calibrated.
+                return torch.zeros_like(weights)
+            if not torch.isfinite(uncertainty).all() or torch.any(uncertainty < 0):
+                return torch.zeros_like(weights)
+            ratio = uncertainty / reference
+            excess = torch.clamp(ratio - 1.0, min=0.0)
+            penalty = torch.exp(-excess / self.ea_uncertainty_temperature)
+            self.ea_last_uncertainty_penalty = penalty.detach()
+            weights = weights * penalty
 
         # Store diagnostics without affecting gradients.
         self.ea_last_uncertainty = (
@@ -409,6 +442,18 @@ class EANTCBCSAC(BCSAC):
                 self.total_it,
             )
 
+            if self.ea_target_uncertainty_reference is not None:
+                writer.add_scalar(
+                    "ea_ntc/target_uncertainty_reference",
+                    self.ea_target_uncertainty_reference,
+                    self.total_it,
+                )
+            if self.ea_last_uncertainty_penalty is not None:
+                writer.add_scalar(
+                    "ea_ntc/mean_uncertainty_penalty",
+                    self.ea_last_uncertainty_penalty.mean().item(),
+                    self.total_it,
+                )
             if self.ea_last_uncertainty is not None:
                 writer.add_scalar(
                     "ea_ntc/mean_uncertainty",

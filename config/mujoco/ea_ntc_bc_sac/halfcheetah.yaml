@@ -43,3 +43,8 @@ ea_dynamics_batch_size: 128
 ea_dynamics_update_interval: 30
 ea_calibration_update_interval: 30
 ea_calibration_fraction: 0.20
+
+# Phase 8: uncertainty-aware source gating
+ea_gate_uncertainty: true
+ea_uncertainty_temperature: 1.0
+ea_uncertainty_min_reference: 0.000001
