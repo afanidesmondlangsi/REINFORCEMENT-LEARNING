@@ -1,0 +1,36 @@
+\begin{table*}[t]
+\centering
+\caption{RQ3 post-adaptation time-averaged normalized AUC from 5,000 to 10,000 training steps. Values are mean $\pm$ standard deviation across three seeds. Bold indicates the largest mean within each environment--shift condition.}
+\label{tab:rq3_post_adaptation_auc}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrrrrr}
+\toprule
+Environment & Shift & BC-SAC & BC-PAR & RLPD & EA-NTC Norm. & EA-NTC Mean \\
+\midrule
+Ant & 0.1 & 21.572 $\pm$ 3.233 & 12.539 $\pm$ 1.326 & 9.628 $\pm$ 2.210 & \textbf{23.063 $\pm$ 10.978} & 21.993 $\pm$ 6.030 \\
+Ant & 0.5 & \textbf{14.564 $\pm$ 2.651} & 9.614 $\pm$ 2.328 & 6.360 $\pm$ 2.728 & 10.677 $\pm$ 2.004 & 12.794 $\pm$ 3.595 \\
+Ant & 2 & 5.920 $\pm$ 2.004 & \textbf{12.655 $\pm$ 0.175} & 5.708 $\pm$ 2.720 & 7.073 $\pm$ 0.829 & 5.869 $\pm$ 1.494 \\
+Ant & 5 & 7.015 $\pm$ 0.320 & \textbf{10.984 $\pm$ 2.230} & 5.983 $\pm$ 1.508 & 6.132 $\pm$ 1.295 & 6.815 $\pm$ 0.196 \\
+\addlinespace
+Halfcheetah & 0.1 & 0.774 $\pm$ 0.975 & \textbf{1.275 $\pm$ 0.174} & 0.180 $\pm$ 0.485 & 0.945 $\pm$ 0.985 & 0.120 $\pm$ 0.953 \\
+Halfcheetah & 0.5 & 12.873 $\pm$ 15.058 & 8.174 $\pm$ 2.275 & 4.381 $\pm$ 4.596 & 14.295 $\pm$ 12.550 & \textbf{16.120 $\pm$ 8.555} \\
+Halfcheetah & 2 & 5.542 $\pm$ 1.758 & 2.047 $\pm$ 0.225 & 1.464 $\pm$ 1.996 & 6.706 $\pm$ 4.803 & \textbf{6.756 $\pm$ 3.943} \\
+Halfcheetah & 5 & 1.833 $\pm$ 1.765 & 1.882 $\pm$ 0.043 & \textbf{3.229 $\pm$ 1.328} & 0.957 $\pm$ 1.300 & 2.839 $\pm$ 2.460 \\
+\addlinespace
+Hopper & 0.1 & \textbf{7.053 $\pm$ 5.305} & 5.335 $\pm$ 1.838 & 2.980 $\pm$ 1.214 & 6.081 $\pm$ 3.009 & 6.512 $\pm$ 2.310 \\
+Hopper & 0.5 & \textbf{7.053 $\pm$ 5.305} & 5.335 $\pm$ 1.838 & 2.980 $\pm$ 1.214 & 6.081 $\pm$ 3.009 & 6.512 $\pm$ 2.310 \\
+Hopper & 2 & 7.951 $\pm$ 2.460 & 7.913 $\pm$ 0.164 & 5.117 $\pm$ 1.511 & 6.093 $\pm$ 1.780 & \textbf{8.413 $\pm$ 1.569} \\
+Hopper & 5 & \textbf{5.548 $\pm$ 2.325} & 4.572 $\pm$ 0.896 & 3.938 $\pm$ 0.625 & 4.138 $\pm$ 0.642 & 4.094 $\pm$ 1.339 \\
+\addlinespace
+Walker2D & 0.1 & 5.897 $\pm$ 4.666 & \textbf{7.446 $\pm$ 1.727} & 4.989 $\pm$ 0.936 & 5.887 $\pm$ 4.782 & 5.644 $\pm$ 5.013 \\
+Walker2D & 0.5 & 9.180 $\pm$ 5.150 & 7.367 $\pm$ 1.922 & 4.139 $\pm$ 2.650 & \textbf{10.220 $\pm$ 4.197} & 9.198 $\pm$ 4.794 \\
+Walker2D & 2 & \textbf{4.375 $\pm$ 1.249} & 3.993 $\pm$ 1.808 & 3.151 $\pm$ 1.481 & 3.555 $\pm$ 2.663 & 4.225 $\pm$ 1.407 \\
+Walker2D & 5 & 3.358 $\pm$ 2.484 & 3.392 $\pm$ 1.368 & \textbf{4.692 $\pm$ 0.801} & 3.018 $\pm$ 2.041 & 3.061 $\pm$ 2.096 \\
+\bottomrule
+\end{tabular}
+\begin{minipage}{0.98\textwidth}
+\footnotesize
+\textit{Note:} AUC is computed using the trapezoidal rule over evaluation checkpoints at 5,000, 6,000, 7,000, 8,000, 9,000, and 10,000 steps, then divided by the 5,000-step interval. SAC Target-Only is excluded from this RQ3 algorithm comparison.
+\end{minipage}
+\end{table*}

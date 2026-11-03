@@ -1,4 +1,6 @@
 
+import copy
+import math
 import numpy as np
 import torch
 import torch.nn.functional as F
@@ -7,6 +9,12 @@ from offline_online.bc_sac import BCSAC
 from offline_online.ea_ntc.compatibility import weighted_bc_loss
 from offline_online.ea_ntc.dynamics import TargetDynamicsEnsemble
 from offline_online.ea_ntc.calibration import TargetErrorCalibrator
+from offline_online.ea_ntc.adaptive_gate import AdaptiveGateController
+from offline_online.ea_ntc.adaptive_bc import AdaptiveBCController
+from offline_online.ea_ntc.transfer_quality_controller import (
+    TransferQualityController,
+    TransferQualityConfig,
+)
 
 
 class EANTCBCSAC(BCSAC):
@@ -25,6 +33,124 @@ class EANTCBCSAC(BCSAC):
         self.ea_enabled = bool(
             config.get("ea_gate_bc", True)
         )
+        # Phase 16B diagnostic: train dynamics normally,
+        # but prevent source weights from changing the BC loss.
+        self.ea_force_unit_weights = bool(
+            config.get("ea_force_unit_weights", False)
+        )
+
+        # Phase 16E: controlled gate-strength ablation.
+        self.ea_gate_strength = float(
+            config.get("ea_gate_strength", 1.0)
+        )
+        if not 0.0 <= self.ea_gate_strength <= 1.0:
+            raise ValueError(
+                "ea_gate_strength must be between 0 and 1"
+            )
+
+        # Phase 17: optional training-only adaptive gate.
+        self.ea_adaptive_gate = bool(
+            config.get("ea_adaptive_gate", False)
+        )
+
+        self.ea_adaptive_controller = AdaptiveGateController(
+            max_strength=float(
+                config.get("ea_adaptive_max_strength", 0.50)
+            ),
+            error_low=float(
+                config.get("ea_adaptive_error_low", 0.35)
+            ),
+            error_high=float(
+                config.get("ea_adaptive_error_high", 0.75)
+            ),
+        )
+
+        self.ea_last_adaptive_strength = (
+            0.0 if self.ea_adaptive_gate
+            else self.ea_gate_strength
+        )
+
+        self.ea_transfer_quality_enabled = bool(
+            config.get("ea_transfer_quality_enabled", False)
+        )
+        self.ea_tq_interval = int(config.get("ea_tq_interval", 100))
+        self.ea_tq_batch_size = int(config.get("ea_tq_batch_size", 64))
+        self.ea_tq_probe_lr = float(
+            config.get("ea_tq_probe_lr", config["actor_lr"])
+        )
+        self.ea_tq_controller = TransferQualityController(
+            TransferQualityConfig(
+                max_strength=float(
+                    config.get("ea_tq_max_strength", 0.5)
+                ),
+                error_low=float(
+                    config.get("ea_adaptive_error_low", 0.35)
+                ),
+                error_high=float(
+                    config.get("ea_adaptive_error_high", 0.75)
+                ),
+                uncertainty_penalty=float(
+                    config.get("ea_tq_uncertainty_penalty", 1.0)
+                ),
+                margin=float(config.get("ea_tq_margin", 0.0)),
+                temperature=float(
+                    config.get("ea_tq_temperature", 0.1)
+                ),
+                ema_decay=float(
+                    config.get("ea_tq_ema_decay", 0.9)
+                ),
+            )
+        )
+        self.ea_adaptive_bc_enabled = bool(
+            config.get("ea_adaptive_bc_enabled", False)
+        )
+
+        self.ea_bc_controller = AdaptiveBCController(
+            confidence_multiplier=float(
+                config.get("ea_bc_confidence_multiplier", 2.0)
+            ),
+            margin=float(
+                config.get("ea_bc_quality_margin", 0.0)
+            ),
+            uncertainty_scale=float(
+                config.get("ea_bc_uncertainty_scale", 2.0)
+            ),
+            max_coefficient=float(
+                config.get("ea_bc_max_coefficient", 1.0)
+            ),
+        )
+
+        self.ea_bc_coefficient = (
+            0.0 if self.ea_adaptive_bc_enabled else 1.0
+        )
+
+        if (
+            self.ea_adaptive_bc_enabled
+            and not self.ea_transfer_quality_enabled
+        ):
+            raise ValueError(
+                "Adaptive BC requires transfer quality to be enabled"
+            )
+
+        self.ea_tq_strength = 0.0
+        self.ea_tq_quality = None
+        self.ea_tq_uncertainty = None
+
+        if self.ea_transfer_quality_enabled:
+            if not self.ea_enabled:
+                raise ValueError("Transfer quality requires ea_gate_bc=true")
+            if self.ea_tq_interval <= 0 or self.ea_tq_batch_size < 2:
+                raise ValueError("Invalid transfer-quality probe schedule")
+            if self.ea_tq_probe_lr <= 0:
+                raise ValueError("Invalid transfer-quality probe learning rate")
+
+        self.ea_bc_reduction = config.get(
+            "ea_bc_reduction", "mean"
+        )
+        if self.ea_bc_reduction not in ("mean", "normalized"):
+            raise ValueError(
+                "ea_bc_reduction must be 'mean' or 'normalized'"
+            )
 
         self.ea_warmup = int(
             config.get("ea_warmup_target_steps", 256)
@@ -51,17 +177,41 @@ class EANTCBCSAC(BCSAC):
         if self.ea_batch_size <= 0:
             raise ValueError("Invalid dynamics batch size")
 
-        self.dynamics = TargetDynamicsEnsemble(
-            state_dim=config["state_dim"],
-            action_dim=config["action_dim"],
-            device=device,
-            ensemble_size=int(
-                config.get("ea_ensemble_size", 3)
-            ),
-            hidden_size=int(
-                config.get("ea_hidden_size", 256)
-            ),
+        # Phase 16: dedicated NumPy RNG for auxiliary dynamics sampling.
+        # This must not advance the global replay-sampling RNG.
+        self.ea_rng = np.random.RandomState(
+            int(config.get("ea_dynamics_seed", 104729))
         )
+
+        # Preserve the global PyTorch RNG state during auxiliary
+        # ensemble initialization.
+        cuda_devices = []
+        if torch.device(device).type == "cuda":
+            cuda_index = torch.device(device).index
+            if cuda_index is None:
+                cuda_index = torch.cuda.current_device()
+            cuda_devices = [cuda_index]
+
+        with torch.random.fork_rng(devices=cuda_devices):
+            torch.manual_seed(
+                int(config.get("ea_dynamics_seed", 104729))
+            )
+            if cuda_devices:
+                torch.cuda.manual_seed_all(
+                    int(config.get("ea_dynamics_seed", 104729))
+                )
+
+            self.dynamics = TargetDynamicsEnsemble(
+                state_dim=config["state_dim"],
+                action_dim=config["action_dim"],
+                device=device,
+                ensemble_size=int(
+                    config.get("ea_ensemble_size", 3)
+                ),
+                hidden_size=int(
+                    config.get("ea_hidden_size", 256)
+                ),
+            )
 
         self.calibrator = TargetErrorCalibrator(
             gate_temperature=float(
@@ -70,6 +220,14 @@ class EANTCBCSAC(BCSAC):
         )
 
         self.ea_gate_ready = False
+        self.ea_reliability_mode = config.get(
+            "ea_reliability_mode", "absolute"
+        )
+        self.ea_max_relative_error = float(
+            config.get("ea_max_relative_error", 0.75)
+        )
+        self.ea_last_baseline_error = None
+        self.ea_last_relative_error = None
         self.ea_dynamics_updates = 0
 
         # Reliability gate: require enough dynamics training and
@@ -172,7 +330,7 @@ class EANTCBCSAC(BCSAC):
             self.total_it % self.ea_update_interval == 0
             or self.ea_dynamics_updates == 0
         ):
-            selected = np.random.choice(
+            selected = self.ea_rng.choice(
                 train_indices,
                 size=self.ea_batch_size,
                 replace=len(train_indices) < self.ea_batch_size,
@@ -224,10 +382,45 @@ class EANTCBCSAC(BCSAC):
             )
             heldout_error = errors.mean().item()
             self.ea_last_calibration_error = heldout_error
+
+            # Phase 11: scale-aware diagnostics only.
+            # The existing gate criterion remains unchanged.
+            with torch.no_grad():
+                observed_delta = next_state - state
+
+                baseline_error = (
+                    observed_delta.pow(2)
+                    .mean(dim=-1)
+                    .mean()
+                    .item()
+                )
+
+                relative_error = heldout_error / max(
+                    baseline_error, 1e-8
+                )
+
+            self.ea_last_baseline_error = baseline_error
+            self.ea_last_relative_error = relative_error
+            # Phase 12: selectable reliability criterion.
+            if self.ea_reliability_mode == "relative":
+                reliable_error = (
+                    np.isfinite(relative_error)
+                    and relative_error <= self.ea_max_relative_error
+                )
+            elif self.ea_reliability_mode == "absolute":
+                reliable_error = (
+                    np.isfinite(heldout_error)
+                    and heldout_error <= self.ea_max_calibration_error
+                )
+            else:
+                raise ValueError(
+                    "Unknown EA-NTC reliability mode: "
+                    + str(self.ea_reliability_mode)
+                )
+
             self.ea_gate_ready = (
                 self.ea_dynamics_updates >= self.ea_min_dynamics_updates
-                and np.isfinite(heldout_error)
-                and heldout_error <= self.ea_max_calibration_error
+                and reliable_error
             )
 
     @torch.no_grad()
@@ -237,7 +430,11 @@ class EANTCBCSAC(BCSAC):
         src_action,
         src_next_state,
     ):
-        if not self.ea_enabled or not self.ea_gate_ready:
+        if (
+            not self.ea_enabled
+            or self.ea_force_unit_weights
+            or not self.ea_gate_ready
+        ):
             return torch.ones(
                 src_state.shape[0],
                 device=src_state.device,
@@ -269,7 +466,181 @@ class EANTCBCSAC(BCSAC):
             uncertainty.detach()
         )
 
+        # Preserve original weights for diagnostics.
+        self.ea_last_raw_source_weights = weights.detach()
+
+        # Phase 17: select gate strength using training-only
+        # held-out dynamics diagnostics when adaptive mode is enabled.
+        if self.ea_transfer_quality_enabled:
+            strength = self.ea_tq_strength
+        elif self.ea_adaptive_gate:
+            strength = self.ea_adaptive_controller.strength(
+                self.ea_last_relative_error,
+                self.ea_gate_ready,
+            )
+        else:
+            strength = self.ea_gate_strength
+
+        self.ea_last_adaptive_strength = strength
+
+        weights = 1.0 - strength * (1.0 - weights)
+
         return weights
+
+
+    def _transfer_quality_probe(
+        self, tar_replay_buffer, src_state, src_action,
+        raw_source_weights,
+    ):
+        # Preserve the training RNG across the entire diagnostic.
+        devices = []
+        if torch.device(self.device).type == "cuda":
+            index = torch.device(self.device).index
+            if index is None:
+                index = torch.cuda.current_device()
+            devices = [index]
+
+        with torch.random.fork_rng(devices=devices):
+            return self._transfer_quality_probe_impl(
+                tar_replay_buffer,
+                src_state,
+                src_action,
+                raw_source_weights,
+            )
+
+    def _transfer_quality_probe_impl(
+        self, tar_replay_buffer, src_state, src_action,
+        raw_source_weights,
+    ):
+        """Training-only paired actor-update diagnostic.
+
+        This is a one-step critic-based proxy, not measured policy return.
+        Probe actors are discarded; the live actor and optimizer are unchanged.
+        """
+        if not self.ea_gate_ready:
+            return
+
+        size = int(tar_replay_buffer.size)
+        count = min(self.ea_tq_batch_size, size)
+
+        if count < 2:
+            return
+
+        # Use a fixed early target-state block, excluded from
+        # dynamics-ensemble fitting by the existing calibration split.
+        indices = np.arange(count)
+        target_states, _, _ = self._target_batch(
+            tar_replay_buffer, indices
+        )
+
+        # Independent temporary actors.
+        source_actor = copy.deepcopy(self.policy)
+        target_actor = copy.deepcopy(self.policy)
+
+        source_actor.train()
+        target_actor.train()
+
+        # The same RNG state is used for corresponding stochastic
+        # action samples. fork_rng restores the global RNG afterward.
+        devices = []
+        if torch.device(self.device).type == "cuda":
+            idx = torch.device(self.device).index
+            if idx is None:
+                idx = torch.cuda.current_device()
+            devices = [idx]
+
+        def actor_objective(actor, include_source):
+            sampled_action, logprob, _ = actor(
+                target_states, get_logprob=True
+            )
+            q1, q2 = self.q_funcs(target_states, sampled_action)
+            qvalue = torch.min(q1, q2)
+
+            scale = (
+                self.config["weight"]
+                / qvalue.abs().mean().detach().clamp(min=1e-8)
+            )
+            loss = scale * (
+                self.alpha.detach() * logprob - qvalue
+            ).mean()
+
+            if include_source:
+                predicted, _, _ = actor(
+                    src_state, get_logprob=True
+                )
+                bc = (predicted - src_action).pow(2).mean(dim=-1)
+
+                if self.ea_bc_reduction == "normalized":
+                    bc_loss = (
+                        (raw_source_weights * bc).sum()
+                        / raw_source_weights.sum().clamp(min=1e-8)
+                    )
+                else:
+                    bc_loss = (raw_source_weights * bc).mean()
+
+                loss = loss + bc_loss
+
+            return loss
+
+        def temporary_step(actor, include_source):
+            loss = actor_objective(actor, include_source)
+            parameters = tuple(actor.parameters())
+            gradients = torch.autograd.grad(loss, parameters)
+            with torch.no_grad():
+                for parameter, gradient in zip(parameters, gradients):
+                    parameter.add_(
+                        gradient, alpha=-self.ea_tq_probe_lr
+                    )
+
+        # Critic parameters remain frozen, but Q derivatives with
+        # respect to actor actions remain available.
+        with torch.random.fork_rng(devices=devices):
+            torch.manual_seed(77123 + int(self.total_it))
+            temporary_step(source_actor, True)
+
+            torch.manual_seed(77123 + int(self.total_it))
+            temporary_step(target_actor, False)
+
+        with torch.no_grad():
+            _, _, source_mean = source_actor(target_states)
+            _, _, target_mean = target_actor(target_states)
+
+            source_q1, source_q2 = self.q_funcs(
+                target_states, source_mean
+            )
+            target_q1, target_q2 = self.q_funcs(
+                target_states, target_mean
+            )
+
+            difference = (
+                torch.min(source_q1, source_q2)
+                - torch.min(target_q1, target_q2)
+            ).reshape(-1)
+
+            quality = difference.mean().item()
+            uncertainty = (
+                difference.std(unbiased=True).item()
+                / math.sqrt(difference.numel())
+            )
+
+        if not (
+            math.isfinite(quality)
+            and math.isfinite(uncertainty)
+        ):
+            return
+
+        self.ea_tq_quality = quality
+        self.ea_tq_uncertainty = uncertainty
+
+        if self.ea_adaptive_bc_enabled:
+            self.ea_bc_coefficient = self.ea_bc_controller.update(
+                quality, uncertainty
+            )
+        self.ea_tq_strength = self.ea_tq_controller.update(
+            relative_error=self.ea_last_relative_error,
+            quality=quality,
+            uncertainty=uncertainty,
+        )
 
     def update_policy_and_temp(
         self,
@@ -308,16 +679,23 @@ class EANTCBCSAC(BCSAC):
                 device=src_state_batch.device,
             )
 
-        # Mean weighted per-transition BC error.
-        # This allows overall BC influence to decrease
-        # when source compatibility is low.
+        # Phase 17B: configurable BC-loss reduction.
+        # "mean" preserves the original implementation.
+        # "normalized" separates selection from mean-weight scaling.
         per_transition_bc = (
             pred_src_act - src_action_batch
         ).pow(2).mean(dim=-1)
 
-        bc_loss = (
-            source_weights * per_transition_bc
-        ).mean()
+        if self.ea_bc_reduction == "mean":
+            bc_loss = (
+                source_weights * per_transition_bc
+            ).mean()
+        else:
+            total_weight = source_weights.sum()
+            bc_loss = (
+                (source_weights * per_transition_bc).sum()
+                / total_weight.clamp(min=1e-8)
+            )
 
         policy_loss = (
             p_w
@@ -325,7 +703,7 @@ class EANTCBCSAC(BCSAC):
                 self.alpha * logprobs_batch
                 - qval_batch
             ).mean()
-            + bc_loss
+            + (self.ea_bc_coefficient * bc_loss)
         )
 
         temp_loss = (
@@ -407,6 +785,37 @@ class EANTCBCSAC(BCSAC):
 
         self.update_target()
 
+        if (
+            self.ea_transfer_quality_enabled
+            and self.ea_gate_ready
+            and self.total_it % self.ea_tq_interval == 0
+        ):
+            # Probe the source weights under the previous gate setting.
+            # This avoids a circular dependency on the new strength.
+            probe_weights = self.source_weights(
+                src_state, src_action, src_next_state
+            )
+            raw_probe_weights = getattr(
+                self, "ea_last_raw_source_weights", None
+            )
+            if raw_probe_weights is not None:
+                # Isolate every stochastic operation in the probe,
+                # including stochastic samples made during evaluation.
+                probe_devices = []
+                if torch.device(self.device).type == "cuda":
+                    device_index = torch.device(self.device).index
+                    if device_index is None:
+                        device_index = torch.cuda.current_device()
+                    probe_devices = [device_index]
+
+                with torch.random.fork_rng(devices=probe_devices):
+                    self._transfer_quality_probe(
+                        tar_replay_buffer,
+                        src_state,
+                        src_action,
+                        raw_probe_weights.detach(),
+                    )
+
         weights = self.source_weights(
             src_state,
             src_action,
@@ -457,11 +866,74 @@ class EANTCBCSAC(BCSAC):
             if self.ea_last_calibration_error is not None:
                 writer.add_scalar("ea_ntc/heldout_target_mse", self.ea_last_calibration_error, self.total_it)
         if writer is not None and self.total_it % 100 == 0:
+            if self.ea_last_baseline_error is not None:
+                writer.add_scalar(
+                    "ea_ntc/heldout_zero_delta_mse",
+                    self.ea_last_baseline_error,
+                    self.total_it,
+                )
+
+            if self.ea_last_relative_error is not None:
+                writer.add_scalar(
+                    "ea_ntc/heldout_relative_mse",
+                    self.ea_last_relative_error,
+                    self.total_it,
+                )
+
             writer.add_scalar(
                 "ea_ntc/mean_source_weight",
                 weights.mean().item(),
                 self.total_it,
             )
+
+            if self.ea_adaptive_gate:
+                writer.add_scalar(
+                    "ea_ntc/adaptive_gate_strength",
+                    self.ea_last_adaptive_strength,
+                    self.total_it,
+                )
+
+                if (
+                    self.ea_gate_ready
+                    and hasattr(self, "ea_last_raw_source_weights")
+                ):
+                    writer.add_scalar(
+                        "ea_ntc/raw_mean_source_weight",
+                        self.ea_last_raw_source_weights.mean().item(),
+                        self.total_it,
+                    )
+
+            if self.ea_transfer_quality_enabled:
+                writer.add_scalar(
+                    "ea_ntc/source_bc_coefficient",
+                    self.ea_bc_coefficient,
+                    self.total_it,
+                )
+
+                if self.ea_bc_controller.last_lower_bound is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_quality_lower_bound",
+                        self.ea_bc_controller.last_lower_bound,
+                        self.total_it,
+                    )
+
+                writer.add_scalar(
+                    "ea_ntc/transfer_gate_strength",
+                    self.ea_tq_strength,
+                    self.total_it,
+                )
+                if self.ea_tq_quality is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_quality",
+                        self.ea_tq_quality,
+                        self.total_it,
+                    )
+                if self.ea_tq_uncertainty is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_uncertainty",
+                        self.ea_tq_uncertainty,
+                        self.total_it,
+                    )
 
             writer.add_scalar(
                 "ea_ntc/gate_ready",

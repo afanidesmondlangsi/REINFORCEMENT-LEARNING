@@ -1,0 +1,6 @@
+algorithm,method_label,condition_wins
+BC_PAR,BC-PAR,4
+BC_SAC,BC-SAC,5
+EA_NTC_NORMALIZED,EA-NTC Normalized,2
+EA_NTC_UNNORMALIZED,EA-NTC Mean,3
+RLPD,RLPD,2

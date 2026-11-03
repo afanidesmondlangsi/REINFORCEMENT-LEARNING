@@ -1,0 +1,5 @@
+method,environment,shift,seed,status,n_eligible,paths
+EA_NTC_NORMALIZED,halfcheetah,0.1,1,DUPLICATE_REVIEW,2,logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb | logs_ea_ntc_phase17b_normalized_smoke\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+BC_SAC,halfcheetah,0.5,0,DUPLICATE_REVIEW,2,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+BC_SAC,halfcheetah,0.5,1,DUPLICATE_REVIEW,2,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+BC_SAC,halfcheetah,0.5,2,DUPLICATE_REVIEW,2,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb

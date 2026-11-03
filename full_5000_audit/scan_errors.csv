@@ -1,0 +1,20 @@
+path,reason
+experiments_10k_576\incomplete_runs\BC_PAR\hopper-friction_0.1_seed0\tb,could not parse environment or seed
+experiments_10k_576\incomplete_runs\BC_SAC\ant-friction_0.5_seed0_recovery\tb,could not parse environment or seed
+logs_ea_ntc_phase16d_smoketest\bc_sac\halfcheetah-friction-0.1\r0\tb,no target return/normalized score scalar
+logs_ea_ntc_phase16d_smoketest_mode1\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb,no target return/normalized score scalar
+logs_phase19\ea_ntc_bc_sac\halfcheetah-friction-0.5\r0\tb,no target return/normalized score scalar
+rq2_generalization\RLPD\hopper-friction-0.5\r1\tb,no target return/normalized score scalar
+rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r1_incomplete\tb,could not parse environment or seed
+rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2\r0\tb,no target return/normalized score scalar
+rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2\r2\tb,no target return/normalized score scalar
+rq2_smoke\BC_SAC\ant-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\RLPD\ant-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\RLPD\walker2d-friction-srcdatatype-medium-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\SAC_TARGET_ONLY\ant-friction-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r0\tb,no target return/normalized score scalar
+rq2_smoke\SAC_TARGET_ONLY\walker2d-friction-0.5\r0\tb,no target return/normalized score scalar
+target_only_smoke\SAC_TARGET_ONLY\hopper-friction-0.1\r0\tb,no target return/normalized score scalar

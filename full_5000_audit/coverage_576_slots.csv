@@ -1,0 +1,289 @@
+method,environment,shift,seed,status,eligible_candidates,paths
+SAC_TARGET_ONLY,hopper,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r0\tb
+SAC_TARGET_ONLY,hopper,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r1\tb
+SAC_TARGET_ONLY,hopper,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r2\tb
+SAC_TARGET_ONLY,hopper,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r0\tb
+SAC_TARGET_ONLY,hopper,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r1\tb
+SAC_TARGET_ONLY,hopper,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r2\tb
+SAC_TARGET_ONLY,hopper,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r0\tb
+SAC_TARGET_ONLY,hopper,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r1\tb
+SAC_TARGET_ONLY,hopper,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r2\tb
+SAC_TARGET_ONLY,hopper,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r0\tb
+SAC_TARGET_ONLY,hopper,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r1\tb
+SAC_TARGET_ONLY,hopper,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r2\tb
+SAC_TARGET_ONLY,halfcheetah,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r0\tb
+SAC_TARGET_ONLY,halfcheetah,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r1\tb
+SAC_TARGET_ONLY,halfcheetah,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r2\tb
+SAC_TARGET_ONLY,halfcheetah,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r0\tb
+SAC_TARGET_ONLY,halfcheetah,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r1\tb
+SAC_TARGET_ONLY,halfcheetah,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r2\tb
+SAC_TARGET_ONLY,halfcheetah,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r0\tb
+SAC_TARGET_ONLY,halfcheetah,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r1\tb
+SAC_TARGET_ONLY,halfcheetah,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r2\tb
+SAC_TARGET_ONLY,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r0\tb
+SAC_TARGET_ONLY,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r1\tb
+SAC_TARGET_ONLY,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r2\tb
+SAC_TARGET_ONLY,walker2d,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r0\tb
+SAC_TARGET_ONLY,walker2d,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r1\tb
+SAC_TARGET_ONLY,walker2d,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r2\tb
+SAC_TARGET_ONLY,walker2d,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r0\tb
+SAC_TARGET_ONLY,walker2d,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r1\tb
+SAC_TARGET_ONLY,walker2d,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r2\tb
+SAC_TARGET_ONLY,walker2d,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r0\tb
+SAC_TARGET_ONLY,walker2d,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r1\tb
+SAC_TARGET_ONLY,walker2d,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r2\tb
+SAC_TARGET_ONLY,walker2d,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r0\tb
+SAC_TARGET_ONLY,walker2d,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r1\tb
+SAC_TARGET_ONLY,walker2d,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r2\tb
+SAC_TARGET_ONLY,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r0\tb
+SAC_TARGET_ONLY,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r1\tb
+SAC_TARGET_ONLY,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r2\tb
+SAC_TARGET_ONLY,ant,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r0\tb
+SAC_TARGET_ONLY,ant,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r1\tb
+SAC_TARGET_ONLY,ant,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r2\tb
+SAC_TARGET_ONLY,ant,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r0\tb
+SAC_TARGET_ONLY,ant,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r1\tb
+SAC_TARGET_ONLY,ant,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r2\tb
+SAC_TARGET_ONLY,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r0\tb
+SAC_TARGET_ONLY,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r1\tb
+SAC_TARGET_ONLY,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r2\tb
+BC_SAC,hopper,0.1,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb | rq1_test\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r0\tb
+BC_SAC,hopper,0.1,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb | rq1_bc_sac\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r1\tb
+BC_SAC,hopper,0.1,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb | rq1_bc_sac\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r2\tb
+BC_SAC,hopper,0.5,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r0\tb
+BC_SAC,hopper,0.5,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r1\tb
+BC_SAC,hopper,0.5,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r2\tb
+BC_SAC,hopper,2.0,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r0\tb
+BC_SAC,hopper,2.0,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r1\tb
+BC_SAC,hopper,2.0,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb | rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r2\tb
+BC_SAC,hopper,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb
+BC_SAC,hopper,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb
+BC_SAC,hopper,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb
+BC_SAC,halfcheetah,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb
+BC_SAC,halfcheetah,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+BC_SAC,halfcheetah,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb
+BC_SAC,halfcheetah,0.5,0,DUPLICATE_REVIEW,3,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb | logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+BC_SAC,halfcheetah,0.5,1,DUPLICATE_REVIEW,3,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb | logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+BC_SAC,halfcheetah,0.5,2,DUPLICATE_REVIEW,3,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb | logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb
+BC_SAC,halfcheetah,2.0,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb
+BC_SAC,halfcheetah,2.0,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb
+BC_SAC,halfcheetah,2.0,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb | rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb
+BC_SAC,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb
+BC_SAC,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb
+BC_SAC,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb
+BC_SAC,walker2d,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb
+BC_SAC,walker2d,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb
+BC_SAC,walker2d,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb
+BC_SAC,walker2d,0.5,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r0\tb
+BC_SAC,walker2d,0.5,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r1\tb
+BC_SAC,walker2d,0.5,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r2\tb
+BC_SAC,walker2d,2.0,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r0\tb
+BC_SAC,walker2d,2.0,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r1\tb
+BC_SAC,walker2d,2.0,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb | rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r2\tb
+BC_SAC,walker2d,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb
+BC_SAC,walker2d,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb
+BC_SAC,walker2d,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb
+BC_SAC,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb
+BC_SAC,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb
+BC_SAC,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb
+BC_SAC,ant,0.5,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r0\tb
+BC_SAC,ant,0.5,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r1\tb
+BC_SAC,ant,0.5,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r2\tb
+BC_SAC,ant,2.0,0,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r0\tb
+BC_SAC,ant,2.0,1,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r1\tb
+BC_SAC,ant,2.0,2,DUPLICATE_REVIEW,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb | rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r2\tb
+BC_SAC,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb
+BC_SAC,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb
+BC_SAC,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb
+RLPD,hopper,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,rq1_rlpd_test\RLPD\hopper-friction-srcdatatype-medium-0.1\r0\tb
+RLPD,hopper,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,rq1_rlpd\RLPD\hopper-friction-srcdatatype-medium-0.1\r1\tb
+RLPD,hopper,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,rq1_rlpd\RLPD\hopper-friction-srcdatatype-medium-0.1\r2\tb
+RLPD,hopper,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r0\tb
+RLPD,hopper,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r1\tb
+RLPD,hopper,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r2\tb
+RLPD,hopper,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r0\tb
+RLPD,hopper,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r1\tb
+RLPD,hopper,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r2\tb
+RLPD,hopper,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r0\tb
+RLPD,hopper,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r1\tb
+RLPD,hopper,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r2\tb
+RLPD,halfcheetah,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb
+RLPD,halfcheetah,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+RLPD,halfcheetah,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb
+RLPD,halfcheetah,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+RLPD,halfcheetah,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+RLPD,halfcheetah,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb
+RLPD,halfcheetah,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb
+RLPD,halfcheetah,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb
+RLPD,halfcheetah,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb
+RLPD,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb
+RLPD,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb
+RLPD,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb
+RLPD,walker2d,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r0\tb
+RLPD,walker2d,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r1\tb
+RLPD,walker2d,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r2\tb
+RLPD,walker2d,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r0\tb
+RLPD,walker2d,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r1\tb
+RLPD,walker2d,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r2\tb
+RLPD,walker2d,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r0\tb
+RLPD,walker2d,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r1\tb
+RLPD,walker2d,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r2\tb
+RLPD,walker2d,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r0\tb
+RLPD,walker2d,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r1\tb
+RLPD,walker2d,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r2\tb
+RLPD,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r0\tb
+RLPD,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r1\tb
+RLPD,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r2\tb
+RLPD,ant,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r0\tb
+RLPD,ant,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r1\tb
+RLPD,ant,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r2\tb
+RLPD,ant,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r0\tb
+RLPD,ant,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r1\tb
+RLPD,ant,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r2\tb
+RLPD,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r0\tb
+RLPD,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r1\tb
+RLPD,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r2\tb
+BC_PAR,hopper,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r0\tb
+BC_PAR,hopper,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r1\tb
+BC_PAR,hopper,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r2\tb
+BC_PAR,hopper,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r0\tb
+BC_PAR,hopper,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r1\tb
+BC_PAR,hopper,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r2\tb
+BC_PAR,hopper,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r0\tb
+BC_PAR,hopper,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r1\tb
+BC_PAR,hopper,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r2\tb
+BC_PAR,hopper,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r0\tb
+BC_PAR,hopper,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r1\tb
+BC_PAR,hopper,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r2\tb
+BC_PAR,halfcheetah,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb
+BC_PAR,halfcheetah,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+BC_PAR,halfcheetah,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb
+BC_PAR,halfcheetah,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+BC_PAR,halfcheetah,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+BC_PAR,halfcheetah,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb
+BC_PAR,halfcheetah,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb
+BC_PAR,halfcheetah,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb
+BC_PAR,halfcheetah,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb
+BC_PAR,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb
+BC_PAR,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb
+BC_PAR,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb
+BC_PAR,walker2d,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r0\tb
+BC_PAR,walker2d,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r1\tb
+BC_PAR,walker2d,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r2\tb
+BC_PAR,walker2d,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r0\tb
+BC_PAR,walker2d,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r1\tb
+BC_PAR,walker2d,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r2\tb
+BC_PAR,walker2d,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r0\tb
+BC_PAR,walker2d,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r1\tb
+BC_PAR,walker2d,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r2\tb
+BC_PAR,walker2d,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r0\tb
+BC_PAR,walker2d,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r1\tb
+BC_PAR,walker2d,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r2\tb
+BC_PAR,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r0\tb
+BC_PAR,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r1\tb
+BC_PAR,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r2\tb
+BC_PAR,ant,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r0\tb
+BC_PAR,ant,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r1\tb
+BC_PAR,ant,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r2\tb
+BC_PAR,ant,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r0\tb
+BC_PAR,ant,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r1\tb
+BC_PAR,ant,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r2\tb
+BC_PAR,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r0\tb
+BC_PAR,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r1\tb
+BC_PAR,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_NORMALIZED,hopper,0.1,0,DUPLICATE_REVIEW,3,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb | logs_hopper_corrected_pilot\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_NORMALIZED,hopper,0.1,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_NORMALIZED,hopper,0.1,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_NORMALIZED,hopper,0.5,0,DUPLICATE_REVIEW,5,ea_ntc_ablation_nogate\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | ea_ntc_ablation_strong\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | ea_ntc_normalized_pilot\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_NORMALIZED,hopper,0.5,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_NORMALIZED,hopper,0.5,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_NORMALIZED,hopper,2.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_NORMALIZED,hopper,2.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_NORMALIZED,hopper,2.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_NORMALIZED,hopper,5.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_NORMALIZED,hopper,5.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_NORMALIZED,hopper,5.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb | logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_NORMALIZED,halfcheetah,0.1,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_NORMALIZED,halfcheetah,0.1,1,DUPLICATE_REVIEW,3,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb | logs_ea_ntc_phase17b_normalized_smoke\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_NORMALIZED,halfcheetah,0.1,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_NORMALIZED,halfcheetah,0.5,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_NORMALIZED,halfcheetah,0.5,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_NORMALIZED,halfcheetah,0.5,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb | logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_NORMALIZED,halfcheetah,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_2.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_NORMALIZED,halfcheetah,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_2.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_NORMALIZED,halfcheetah,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_2.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_NORMALIZED,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_5.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_NORMALIZED,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_5.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_NORMALIZED,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_halfcheetah_shift_5.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_NORMALIZED,walker2d,0.1,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_NORMALIZED,walker2d,0.1,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_NORMALIZED,walker2d,0.1,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_NORMALIZED,walker2d,0.5,0,DUPLICATE_REVIEW,4,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_gate_sensitivity_090\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_gate_sensitivity_090_095\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_NORMALIZED,walker2d,0.5,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_NORMALIZED,walker2d,0.5,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_NORMALIZED,walker2d,2.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_NORMALIZED,walker2d,2.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_NORMALIZED,walker2d,2.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_NORMALIZED,walker2d,5.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_NORMALIZED,walker2d,5.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_NORMALIZED,walker2d,5.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb | logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_NORMALIZED,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.1_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_NORMALIZED,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.1_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_NORMALIZED,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.1_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_NORMALIZED,ant,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.5_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_NORMALIZED,ant,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.5_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_NORMALIZED,ant,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_0.5_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_NORMALIZED,ant,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_2.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_NORMALIZED,ant,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_2.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_NORMALIZED,ant,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_2.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_NORMALIZED,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_5.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_NORMALIZED,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_5.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_NORMALIZED,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\NORMALIZED_ant_shift_5.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_UNNORMALIZED,hopper,0.1,0,DUPLICATE_REVIEW,3,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb | logs_hopper_corrected_pilot\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_UNNORMALIZED,hopper,0.1,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_UNNORMALIZED,hopper,0.1,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_UNNORMALIZED,hopper,0.5,0,DUPLICATE_REVIEW,3,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_UNNORMALIZED,hopper,0.5,1,DUPLICATE_REVIEW,3,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb | logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_UNNORMALIZED,hopper,0.5,2,DUPLICATE_REVIEW,3,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb | logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_UNNORMALIZED,hopper,2.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_UNNORMALIZED,hopper,2.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_UNNORMALIZED,hopper,2.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_UNNORMALIZED,hopper,5.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_UNNORMALIZED,hopper,5.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_UNNORMALIZED,hopper,5.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb | logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_UNNORMALIZED,halfcheetah,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_UNNORMALIZED,halfcheetah,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_2.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_UNNORMALIZED,halfcheetah,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_2.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_UNNORMALIZED,halfcheetah,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_2.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_UNNORMALIZED,halfcheetah,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_5.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_UNNORMALIZED,halfcheetah,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_5.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_UNNORMALIZED,halfcheetah,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_halfcheetah_shift_5.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_UNNORMALIZED,walker2d,0.1,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_UNNORMALIZED,walker2d,0.1,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_UNNORMALIZED,walker2d,0.1,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_UNNORMALIZED,walker2d,0.5,0,DUPLICATE_REVIEW,4,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_gate_sensitivity_090\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_gate_sensitivity_090_095\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_UNNORMALIZED,walker2d,0.5,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_UNNORMALIZED,walker2d,0.5,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_UNNORMALIZED,walker2d,2.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_UNNORMALIZED,walker2d,2.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_UNNORMALIZED,walker2d,2.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_UNNORMALIZED,walker2d,5.0,0,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_UNNORMALIZED,walker2d,5.0,1,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_UNNORMALIZED,walker2d,5.0,2,DUPLICATE_REVIEW,2,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb | logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb
+EA_NTC_UNNORMALIZED,ant,0.1,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.1_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb
+EA_NTC_UNNORMALIZED,ant,0.1,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.1_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb
+EA_NTC_UNNORMALIZED,ant,0.1,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.1_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb
+EA_NTC_UNNORMALIZED,ant,0.5,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.5_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb
+EA_NTC_UNNORMALIZED,ant,0.5,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.5_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb
+EA_NTC_UNNORMALIZED,ant,0.5,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_0.5_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb
+EA_NTC_UNNORMALIZED,ant,2.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_2.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb
+EA_NTC_UNNORMALIZED,ant,2.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_2.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb
+EA_NTC_UNNORMALIZED,ant,2.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_2.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb
+EA_NTC_UNNORMALIZED,ant,5.0,0,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_5.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb
+EA_NTC_UNNORMALIZED,ant,5.0,1,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_5.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb
+EA_NTC_UNNORMALIZED,ant,5.0,2,ONE_ELIGIBLE_CANDIDATE,1,logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000\UNNORMALIZED_ant_shift_5.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb

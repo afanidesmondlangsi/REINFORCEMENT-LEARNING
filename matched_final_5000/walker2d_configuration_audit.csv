@@ -1,0 +1,13 @@
+shift,seed,status,differences
+0.1,0,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+0.1,1,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+0.1,2,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+0.5,0,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+0.5,1,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+0.5,2,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+2.0,0,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+2.0,1,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+2.0,2,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+5.0,0,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+5.0,1,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean
+5.0,2,DIFFERENT,ea_bc_reduction: NORMALIZED=normalized | MEAN=mean

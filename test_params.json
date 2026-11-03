@@ -1,0 +1,4 @@
+{
+    "eval_freq": 1000,
+    "eval_episode": 10
+}

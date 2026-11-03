@@ -12,6 +12,9 @@ from gym.wrappers.time_limit            import  TimeLimit
 
 def call_mujoco_env(env_config: Dict) -> gym.Env:
     env_name     =   env_config['env_name'].lower()     #   eg. "hopper_friction" or "hopper_morph_foot", body_pard is required only in "morph" or 'kinematic" mode
+    corrected_hopper = bool(
+        env_config.get("corrected_hopper_friction", False)
+    )
     shift_level  =   env_config['shift_level']          #   either float(0.1/0.5/...) or level(easy/medium/hard)
 
     if '-' in env_name:
@@ -35,7 +38,17 @@ def call_mujoco_env(env_config: Dict) -> gym.Env:
             return gym.make('Hopper-v3')
         elif 'friction' in env_name or 'gravity' in env_name:
             return TimeLimit(
-                HopperEnv(xml_file=f"{str(Path(__file__).parent.absolute())}/assets/{env_name}_{float(shift_level)}.xml",),
+                HopperEnv(
+                    xml_file=str(
+                        Path(__file__).parent.absolute()
+                        / (
+                            "assets_corrected"
+                            if corrected_hopper and env_name == "hopper_friction"
+                            else "assets"
+                        )
+                        / f"{env_name}_{float(shift_level)}.xml"
+                    )
+                ),
                 max_episode_steps=1000
             )
         elif 'noise' in env_name:
