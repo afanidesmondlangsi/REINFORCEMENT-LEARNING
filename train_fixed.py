@@ -1,0 +1,1614 @@
+import numpy as np
+import torch
+import gym
+import argparse
+import os
+import random
+import math
+import time
+import copy
+import gc
+import yaml
+import json
+import d4rl
+import algo.utils as utils
+
+from pathlib import Path
+from algo.call_algo import call_algo
+from dataset.call_dataset import call_tar_dataset
+from envs.mujoco.call_mujoco_env import call_mujoco_env
+from envs.adroit.call_adroit_env import call_adroit_env
+from envs.antmaze.call_antmaze_env import call_antmaze_env
+from envs.infos import get_normalized_score
+from tensorboardX import SummaryWriter
+
+
+# ============================================================
+# EVALUATION
+# ============================================================
+
+def eval_policy(policy, env, eval_episodes=10, eval_cnt=None):
+
+    avg_reward = 0.
+
+    for episode_idx in range(eval_episodes):
+
+        state, done = env.reset(), False
+
+        while not done:
+
+            action = policy.select_action(np.array(state))
+
+            next_state, reward, done, _ = env.step(action)
+
+            avg_reward += reward
+
+            state = next_state
+
+    avg_reward /= eval_episodes
+
+    print(
+        "[{}] Evaluation over {} episodes: {}".format(
+            eval_cnt,
+            eval_episodes,
+            avg_reward
+        )
+    )
+
+    return avg_reward
+
+
+# ============================================================
+# MEMORY-SAFE REWARD PROCESSING
+# ============================================================
+
+def shift_rewards_in_chunks(
+    replay_buffer,
+    amount,
+    chunk_size=8192
+):
+
+    if amount == 0 or replay_buffer.size == 0:
+        return
+
+    for start in range(
+        0,
+        replay_buffer.size,
+        chunk_size
+    ):
+
+        end = min(
+            start + chunk_size,
+            replay_buffer.size
+        )
+
+        replay_buffer.reward[start:end] -= amount
+
+
+# ============================================================
+# MAIN PROGRAM
+# ============================================================
+
+if __name__ == "__main__":
+
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--dir",
+        default="./logs"
+    )
+
+    parser.add_argument(
+        "--policy",
+        default="SAC",
+        help="policy to use"
+    )
+
+    parser.add_argument(
+        "--env",
+        default="halfcheetah-friction"
+    )
+
+    parser.add_argument(
+        "--srctype",
+        default="medium",
+        help="source dataset type"
+    )
+
+    parser.add_argument(
+        "--tartype",
+        default="medium",
+        help="target dataset type"
+    )
+
+    parser.add_argument(
+        "--shift_level",
+        default=0.1
+    )
+
+    parser.add_argument(
+        "--corrected_hopper_friction",
+        action="store_true"
+    )
+
+    parser.add_argument(
+        "--mode",
+        default=0,
+        type=int
+    )
+
+    parser.add_argument(
+        "--seed",
+        default=0,
+        type=int
+    )
+
+    parser.add_argument(
+        "--save-model",
+        action="store_true"
+    )
+
+    parser.add_argument(
+        "--tar_env_interact_interval",
+        default=10,
+        type=int
+    )
+
+    parser.add_argument(
+        "--max_step",
+        default=int(1e6),
+        type=int
+    )
+
+    parser.add_argument(
+        "--params",
+        default=None
+    )
+
+    args = parser.parse_args()
+
+    # --------------------------------------------------------
+    # ENVIRONMENT IDENTIFICATION
+    # --------------------------------------------------------
+
+    if "_" in args.env:
+        args.env = args.env.replace("_", "-")
+
+    if (
+        "halfcheetah" in args.env
+        or "hopper" in args.env
+        or "walker2d" in args.env
+        or args.env.split("-")[0] == "ant"
+    ):
+
+        domain = "mujoco"
+
+    elif (
+        "pen" in args.env
+        or "relocate" in args.env
+        or "door" in args.env
+        or "hammer" in args.env
+    ):
+
+        domain = "adroit"
+
+    elif "antmaze" in args.env:
+
+        domain = "antmaze"
+
+    else:
+
+        raise NotImplementedError(
+            "Unsupported environment: {}".format(args.env)
+        )
+
+    print("Domain:", domain)
+
+    call_env = {
+
+        "mujoco": call_mujoco_env,
+
+        "adroit": call_adroit_env,
+
+        "antmaze": call_antmaze_env,
+
+    }
+
+    # --------------------------------------------------------
+    # ENVIRONMENT NAMES
+    # --------------------------------------------------------
+
+    ref_env_name = (
+        args.env + "-" + str(args.shift_level)
+    )
+
+    if domain == "antmaze":
+
+        src_env_name = args.env
+
+        src_env_name_config = args.env
+
+    elif domain == "adroit":
+
+        src_env_name = args.env
+
+        src_env_name_config = args.env.split("-")[0]
+
+    else:
+
+        src_env_name = args.env.split("-")[0]
+
+        src_env_name_config = src_env_name
+
+    tar_env_name = args.env
+
+    # --------------------------------------------------------
+    # SOURCE ENVIRONMENT
+    # --------------------------------------------------------
+
+    if args.mode in (1, 3):
+
+        if domain == "antmaze":
+
+            src_env_name = (
+                src_env_name.split("-")[0]
+                + "-"
+                + args.srctype
+                + "-v0"
+            )
+
+        elif domain == "adroit":
+
+            src_env_name = (
+                src_env_name.split("-")[0]
+                + "-"
+                + args.srctype
+                + "-v0"
+            )
+
+        else:
+
+            src_env_name = (
+                src_env_name
+                + "-"
+                + args.srctype
+                + "-v2"
+            )
+
+        src_env = None
+
+        src_eval_env = gym.make(src_env_name)
+
+        src_eval_env.seed(args.seed)
+
+    else:
+
+        src_env_config = {
+
+            "env_name": src_env_name,
+
+            "shift_level": None,
+
+        }
+
+        src_env = call_env[domain](src_env_config)
+
+        src_env.seed(args.seed)
+
+        if "antmaze" in src_env_name:
+
+            src_eval_env = call_env[domain](
+                src_env_config
+            )
+
+        else:
+
+            src_eval_env = copy.deepcopy(src_env)
+
+        src_eval_env.seed(args.seed + 100)
+
+    # --------------------------------------------------------
+    # TARGET ENVIRONMENT
+    # --------------------------------------------------------
+
+    tar_env_config = {
+
+        "env_name": tar_env_name,
+
+        "shift_level": args.shift_level,
+
+        "corrected_hopper_friction":
+            args.corrected_hopper_friction,
+
+    }
+
+    if args.mode in (2, 3):
+
+        tar_env = None
+
+        tar_eval_env = call_env[domain](
+            tar_env_config
+        )
+
+        tar_eval_env.seed(args.seed + 100)
+
+    else:
+
+        tar_env = call_env[domain](
+            tar_env_config
+        )
+
+        tar_env.seed(args.seed)
+
+        tar_eval_env = call_env[domain](
+            tar_env_config
+        )
+
+        tar_eval_env.seed(args.seed + 100)
+
+    if args.mode not in [0, 1, 2, 3]:
+
+        raise NotImplementedError(
+            "Invalid training mode."
+        )
+
+    # --------------------------------------------------------
+    # LOAD CONFIGURATION
+    # --------------------------------------------------------
+
+    policy_config_name = args.policy.lower()
+
+    config_path = (
+        Path(__file__).parent.absolute()
+        / "config"
+        / domain
+        / policy_config_name
+        / (src_env_name_config + ".yaml")
+    )
+
+    with open(
+        config_path,
+        "r",
+        encoding="utf-8"
+    ) as f:
+
+        config = yaml.safe_load(f)
+
+    if args.params is not None:
+
+        # ----------------------------------------------------
+        # ROBUST PARAMETER LOADING
+        #
+        # Accept either:
+        #   1. A path to a JSON file:
+        #        --params .\\test_params.json
+        #   2. Inline JSON:
+        #        --params "{\\"eval_freq\\":1000}"
+        #
+        # Reading a file is recommended on Windows PowerShell
+        # because it avoids command-line quote-escaping errors.
+        # ----------------------------------------------------
+
+        params_argument = os.path.expandvars(
+            os.path.expanduser(str(args.params).strip())
+        )
+
+        if os.path.isfile(params_argument):
+
+            params_path = os.path.abspath(params_argument)
+
+            try:
+                with open(
+                    params_path,
+                    "r",
+                    encoding="utf-8-sig"
+                ) as params_file:
+                    override_params = json.load(params_file)
+
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    "Invalid JSON in parameter file '{}': {}".format(
+                        params_path,
+                        exc
+                    )
+                )
+
+            print("Loaded parameters from JSON file:", params_path)
+
+        else:
+
+            try:
+                override_params = json.loads(params_argument)
+
+            except json.JSONDecodeError as exc:
+                raise ValueError(
+                    "--params must be either a valid JSON file path "
+                    "or valid inline JSON. Received: {!r}. "
+                    "On Windows PowerShell, create a JSON file and pass "
+                    "its path, for example: --params .\\test_params.json. "
+                    "Original JSON error: {}".format(
+                        params_argument,
+                        exc
+                    )
+                )
+
+        if not isinstance(override_params, dict):
+            raise TypeError(
+                "The parameters supplied through --params must be a "
+                "JSON object/dictionary, not {}.".format(
+                    type(override_params).__name__
+                )
+            )
+
+        config.update(override_params)
+
+        print("Updated parameters:", override_params)
+
+    print("----------------------------------------")
+
+    print(
+        "Policy: {}, Environment: {}, Seed: {}".format(
+            args.policy,
+            args.env,
+            args.seed
+        )
+    )
+
+    print("----------------------------------------")
+
+    # --------------------------------------------------------
+    # OUTPUT DIRECTORY
+    # --------------------------------------------------------
+
+    if args.mode == 1:
+
+        outdir = (
+            args.dir
+            + "/"
+            + args.policy
+            + "/"
+            + args.env
+            + "-srcdatatype-"
+            + args.srctype
+            + "-"
+            + str(args.shift_level)
+            + "/r"
+            + str(args.seed)
+        )
+
+    elif args.mode == 2:
+
+        outdir = (
+            args.dir
+            + "/"
+            + args.policy
+            + "/"
+            + args.env
+            + "-tardatatype-"
+            + args.tartype
+            + "-"
+            + str(args.shift_level)
+            + "/r"
+            + str(args.seed)
+        )
+
+    elif args.mode == 3:
+
+        outdir = (
+            args.dir
+            + "/"
+            + args.policy
+            + "/"
+            + args.env
+            + "-srcdatatype-"
+            + args.srctype
+            + "-tardatatype-"
+            + args.tartype
+            + "-"
+            + str(args.shift_level)
+            + "/r"
+            + str(args.seed)
+        )
+
+    else:
+
+        outdir = (
+            args.dir
+            + "/"
+            + args.policy
+            + "/"
+            + args.env
+            + "-"
+            + str(args.shift_level)
+            + "/r"
+            + str(args.seed)
+        )
+
+    os.makedirs(
+        outdir,
+        exist_ok=True
+    )
+
+    writer = SummaryWriter(
+        os.path.join(outdir, "tb")
+    )
+
+    if args.save_model:
+
+        os.makedirs(
+            os.path.join(outdir, "models"),
+            exist_ok=True
+        )
+
+    # --------------------------------------------------------
+    # RANDOM SEEDS
+    # --------------------------------------------------------
+
+    if src_env is not None:
+
+        src_env.action_space.seed(args.seed)
+
+    if tar_env is not None:
+
+        tar_env.action_space.seed(args.seed)
+
+    src_eval_env.action_space.seed(args.seed)
+
+    tar_eval_env.action_space.seed(args.seed)
+
+    torch.manual_seed(args.seed)
+
+    np.random.seed(args.seed)
+
+    random.seed(args.seed)
+
+    torch.backends.cudnn.deterministic = True
+
+    torch.backends.cudnn.benchmark = False
+
+    if torch.cuda.is_available():
+
+        torch.cuda.manual_seed_all(args.seed)
+
+    # --------------------------------------------------------
+    # ENVIRONMENT DIMENSIONS
+    # --------------------------------------------------------
+
+    state_dim = (
+        src_eval_env.observation_space.shape[0]
+    )
+
+    action_dim = (
+        src_eval_env.action_space.shape[0]
+    )
+
+    max_action = float(
+        src_eval_env.action_space.high[0]
+    )
+
+    min_action = -max_action
+
+    device = torch.device(
+        "cuda" if torch.cuda.is_available()
+        else "cpu"
+    )
+
+    print("Device:", device)
+
+    print("State dimension:", state_dim)
+
+    print("Action dimension:", action_dim)
+
+    # --------------------------------------------------------
+    # SHIFT LEVEL
+    # --------------------------------------------------------
+
+    if domain == "mujoco":
+
+        if args.shift_level in [
+            "easy",
+            "medium",
+            "hard"
+        ]:
+
+            shift_level = args.shift_level
+
+        else:
+
+            shift_level = float(
+                args.shift_level
+            )
+
+    else:
+
+        shift_level = args.shift_level
+
+    config.update({
+
+        "env_name": args.env,
+
+        "state_dim": state_dim,
+
+        "action_dim": action_dim,
+
+        "max_action": max_action,
+
+        "tar_env_interact_interval":
+            int(args.tar_env_interact_interval),
+
+        "max_step": int(args.max_step),
+
+        "shift_level": shift_level,
+
+    })
+
+    # --------------------------------------------------------
+    # INITIALIZE ALGORITHM
+    # --------------------------------------------------------
+
+    policy = call_algo(
+        args.policy,
+        config,
+        args.mode,
+        device
+    )
+
+    # --------------------------------------------------------
+    # WRITE CONFIGURATION
+    # --------------------------------------------------------
+
+    with open(
+        os.path.join(outdir, "log.txt"),
+        "w",
+        encoding="utf-8"
+    ) as f:
+
+        f.write(
+            "\nPolicy: {}; Env: {}, seed: {}".format(
+                args.policy,
+                args.env,
+                args.seed
+            )
+        )
+
+        for item in config.items():
+
+            f.write(
+                "\n{}".format(item)
+            )
+
+    # --------------------------------------------------------
+    # INITIALIZE REPLAY BUFFERS
+    # --------------------------------------------------------
+
+    print("\nInitializing replay buffers...")
+
+    src_replay_buffer = utils.ReplayBuffer(
+        state_dim,
+        action_dim,
+        device
+    )
+
+    tar_replay_buffer = utils.ReplayBuffer(
+        state_dim,
+        action_dim,
+        device
+    )
+
+    print("Replay buffers initialized.")
+
+    # ========================================================
+    # MEMORY-SAFE OFFLINE SOURCE DATASET LOADING
+    # ========================================================
+
+    if args.mode in (1, 3):
+
+        print(
+            "\nLoading offline source dataset directly from HDF5..."
+        )
+
+        if not hasattr(
+            src_replay_buffer,
+            "convert_D4RL_hdf5"
+        ):
+
+            raise RuntimeError(
+                "convert_D4RL_hdf5 is missing from "
+                "algo/utils.py. Update ReplayBuffer first."
+            )
+
+        src_replay_buffer.convert_D4RL_hdf5(
+            src_eval_env,
+            chunk_size=8192
+        )
+
+        if "antmaze" in args.env:
+
+            shift_rewards_in_chunks(
+                src_replay_buffer,
+                1.0
+            )
+
+        print(
+            "Source transitions:",
+            src_replay_buffer.size
+        )
+
+        print(
+            "Source state shape:",
+            src_replay_buffer.state.shape
+        )
+
+        gc.collect()
+
+    # ========================================================
+    # OFFLINE TARGET DATASET LOADING
+    # ========================================================
+
+    if args.mode in (2, 3):
+
+        print(
+            "\nPreparing offline target dataset..."
+        )
+
+        tar_dataset = call_tar_dataset(
+            tar_env_name,
+            shift_level,
+            args.tartype
+        )
+
+        tar_replay_buffer.convert_D4RL(
+            tar_dataset,
+            chunk_size=8192
+        )
+
+        del tar_dataset
+
+        gc.collect()
+
+        if "antmaze" in args.env:
+
+            shift_rewards_in_chunks(
+                tar_replay_buffer,
+                1.0
+            )
+
+        print(
+            "Target transitions:",
+            tar_replay_buffer.size
+        )
+
+        print(
+            "Target state shape:",
+            tar_replay_buffer.state.shape
+        )
+
+    # --------------------------------------------------------
+    # INITIAL EVALUATION
+    # --------------------------------------------------------
+
+    eval_cnt = 0
+
+    eval_src_return = eval_policy(
+        policy,
+        src_eval_env,
+        eval_cnt=eval_cnt
+    )
+
+    eval_tar_return = eval_policy(
+        policy,
+        tar_eval_env,
+        eval_cnt=eval_cnt
+    )
+
+    eval_cnt += 1
+    # ========================================================
+    # CONDITION A: TARGET-ONLY SAC
+    # ========================================================
+
+    if (
+        args.mode == 0
+        and args.policy.lower() == "sac_target_only"
+    ):
+
+        tar_state = tar_env.reset()
+
+        tar_done = False
+
+        tar_episode_reward = 0
+
+        tar_episode_timesteps = 0
+
+        tar_episode_num = 0
+
+        for t in range(int(config["max_step"])):
+
+            # Target environment interaction
+
+            if t % config["tar_env_interact_interval"] == 0:
+
+                tar_episode_timesteps += 1
+
+                tar_action = policy.select_action(
+                    np.array(tar_state),
+                    test=False
+                )
+
+                (
+                    tar_next_state,
+                    tar_reward,
+                    tar_done,
+                    _
+                ) = tar_env.step(tar_action)
+
+                tar_done_bool = (
+                    float(tar_done)
+                    if tar_episode_timesteps
+                    < tar_env._max_episode_steps
+                    else 0
+                )
+
+                if "antmaze" in args.env:
+
+                    tar_reward -= 1.0
+
+                tar_replay_buffer.add(
+                    tar_state,
+                    tar_action,
+                    tar_next_state,
+                    tar_reward,
+                    tar_done_bool
+                )
+
+                tar_state = tar_next_state
+
+                tar_episode_reward += tar_reward
+
+                if tar_done:
+
+                    print(
+                        "Total T: {} Episode Num: {} "
+                        "Episode T: {} Reward: {}".format(
+                            t + 1,
+                            tar_episode_num + 1,
+                            tar_episode_timesteps,
+                            tar_episode_reward
+                        )
+                    )
+
+                    writer.add_scalar(
+                        "train/target return",
+                        tar_episode_reward,
+                        global_step=t + 1
+                    )
+
+                    train_normalized_score = (
+                        get_normalized_score(
+                            tar_episode_reward,
+                            ref_env_name
+                        )
+                    )
+
+                    writer.add_scalar(
+                        "train/target normalized score",
+                        train_normalized_score,
+                        global_step=t + 1
+                    )
+
+                    tar_state = tar_env.reset()
+
+                    tar_done = False
+
+                    tar_episode_reward = 0
+
+                    tar_episode_timesteps = 0
+
+                    tar_episode_num += 1
+
+            # Target-only training
+
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config["batch_size"],
+                writer
+            )
+
+            # Evaluation
+
+            if (t + 1) % config["eval_freq"] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    "test/source return",
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    "test/target return",
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = (
+                    get_normalized_score(
+                        tar_eval_return,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "test/target normalized score",
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+
+                    policy.save(
+                        "{}/models/model".format(outdir)
+                    )
+
+    # ========================================================
+    # MODE 0: ONLINE SOURCE + ONLINE TARGET
+    # ========================================================
+
+    elif args.mode == 0:
+
+        src_state = src_env.reset()
+
+        tar_state = tar_env.reset()
+
+        src_done = False
+
+        tar_done = False
+
+        src_episode_reward = 0
+
+        src_episode_timesteps = 0
+
+        src_episode_num = 0
+
+        tar_episode_reward = 0
+
+        tar_episode_timesteps = 0
+
+        tar_episode_num = 0
+
+        for t in range(int(config["max_step"])):
+
+            src_episode_timesteps += 1
+
+            # Source interaction
+
+            src_action = (
+                policy.select_action(
+                    np.array(src_state),
+                    test=False
+                )
+                + np.random.normal(
+                    0,
+                    max_action * 0.2,
+                    size=action_dim
+                )
+            ).clip(
+                -max_action,
+                max_action
+            )
+
+            (
+                src_next_state,
+                src_reward,
+                src_done,
+                _
+            ) = src_env.step(src_action)
+
+            src_done_bool = (
+                float(src_done)
+                if src_episode_timesteps
+                < src_env._max_episode_steps
+                else 0
+            )
+
+            if "antmaze" in args.env:
+
+                src_reward -= 1.0
+
+            src_replay_buffer.add(
+                src_state,
+                src_action,
+                src_next_state,
+                src_reward,
+                src_done_bool
+            )
+
+            src_state = src_next_state
+
+            src_episode_reward += src_reward
+
+            # Target interaction
+
+            if t % config["tar_env_interact_interval"] == 0:
+
+                tar_episode_timesteps += 1
+
+                tar_action = policy.select_action(
+                    np.array(tar_state),
+                    test=False
+                )
+
+                (
+                    tar_next_state,
+                    tar_reward,
+                    tar_done,
+                    _
+                ) = tar_env.step(tar_action)
+
+                tar_done_bool = (
+                    float(tar_done)
+                    if tar_episode_timesteps
+                    < tar_env._max_episode_steps
+                    else 0
+                )
+
+                if "antmaze" in args.env:
+
+                    tar_reward -= 1.0
+
+                tar_replay_buffer.add(
+                    tar_state,
+                    tar_action,
+                    tar_next_state,
+                    tar_reward,
+                    tar_done_bool
+                )
+
+                tar_state = tar_next_state
+
+                tar_episode_reward += tar_reward
+
+            # Training
+
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config["batch_size"],
+                writer
+            )
+
+            # Source episode completion
+
+            if src_done:
+
+                print(
+                    "Total T: {} Episode Num: {} "
+                    "Episode T: {} Reward: {}".format(
+                        t + 1,
+                        src_episode_num + 1,
+                        src_episode_timesteps,
+                        src_episode_reward
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/source return",
+                    src_episode_reward,
+                    global_step=t + 1
+                )
+
+                src_state = src_env.reset()
+
+                src_done = False
+
+                src_episode_reward = 0
+
+                src_episode_timesteps = 0
+
+                src_episode_num += 1
+
+            # Target episode completion
+
+            if tar_done:
+
+                print(
+                    "Total T: {} Episode Num: {} "
+                    "Episode T: {} Reward: {}".format(
+                        t + 1,
+                        tar_episode_num + 1,
+                        tar_episode_timesteps,
+                        tar_episode_reward
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/target return",
+                    tar_episode_reward,
+                    global_step=t + 1
+                )
+
+                train_normalized_score = (
+                    get_normalized_score(
+                        tar_episode_reward,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/target normalized score",
+                    train_normalized_score,
+                    global_step=t + 1
+                )
+
+                tar_state = tar_env.reset()
+
+                tar_done = False
+
+                tar_episode_reward = 0
+
+                tar_episode_timesteps = 0
+
+                tar_episode_num += 1
+
+            # Evaluation
+
+            if (t + 1) % config["eval_freq"] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    "test/source return",
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    "test/target return",
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = (
+                    get_normalized_score(
+                        tar_eval_return,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "test/target normalized score",
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+
+                    policy.save(
+                        "{}/models/model".format(outdir)
+                    )
+
+    # ========================================================
+    # MODE 1: OFFLINE SOURCE + ONLINE TARGET
+    # ========================================================
+
+    elif args.mode == 1:
+
+        tar_state = tar_env.reset()
+
+        tar_done = False
+
+        tar_episode_reward = 0
+
+        tar_episode_timesteps = 0
+
+        tar_episode_num = 0
+
+        for t in range(int(config["max_step"])):
+
+            # Target environment interaction
+
+            if t % config["tar_env_interact_interval"] == 0:
+
+                tar_episode_timesteps += 1
+
+                tar_action = policy.select_action(
+                    np.array(tar_state),
+                    test=False
+                )
+
+                (
+                    tar_next_state,
+                    tar_reward,
+                    tar_done,
+                    _
+                ) = tar_env.step(tar_action)
+
+                tar_done_bool = (
+                    float(tar_done)
+                    if tar_episode_timesteps
+                    < tar_env._max_episode_steps
+                    else 0
+                )
+
+                if "antmaze" in args.env:
+
+                    tar_reward -= 1.0
+
+                tar_replay_buffer.add(
+                    tar_state,
+                    tar_action,
+                    tar_next_state,
+                    tar_reward,
+                    tar_done_bool
+                )
+
+                tar_state = tar_next_state
+
+                tar_episode_reward += tar_reward
+
+            # Offline-to-online training
+
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config["batch_size"],
+                writer
+            )
+
+            # Target episode completion
+
+            if tar_done:
+
+                print(
+                    "Total T: {} Episode Num: {} "
+                    "Episode T: {} Reward: {}".format(
+                        t + 1,
+                        tar_episode_num + 1,
+                        tar_episode_timesteps,
+                        tar_episode_reward
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/target return",
+                    tar_episode_reward,
+                    global_step=t + 1
+                )
+
+                train_normalized_score = (
+                    get_normalized_score(
+                        tar_episode_reward,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/target normalized score",
+                    train_normalized_score,
+                    global_step=t + 1
+                )
+
+                tar_state = tar_env.reset()
+
+                tar_done = False
+
+                tar_episode_reward = 0
+
+                tar_episode_timesteps = 0
+
+                tar_episode_num += 1
+
+            # Evaluation
+
+            if (t + 1) % config["eval_freq"] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    "test/source return",
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    "test/target return",
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = (
+                    get_normalized_score(
+                        tar_eval_return,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "test/target normalized score",
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+
+                    policy.save(
+                        "{}/models/model".format(outdir)
+                    )
+
+    # ========================================================
+    # MODE 2: ONLINE SOURCE + OFFLINE TARGET
+    # ========================================================
+
+    elif args.mode == 2:
+
+        src_state = src_env.reset()
+
+        src_done = False
+
+        src_episode_reward = 0
+
+        src_episode_timesteps = 0
+
+        src_episode_num = 0
+
+        for t in range(int(config["max_step"])):
+
+            src_episode_timesteps += 1
+
+            # Source interaction
+
+            src_action = (
+                policy.select_action(
+                    np.array(src_state),
+                    test=False
+                )
+                + np.random.normal(
+                    0,
+                    max_action * 0.2,
+                    size=action_dim
+                )
+            ).clip(
+                -max_action,
+                max_action
+            )
+
+            (
+                src_next_state,
+                src_reward,
+                src_done,
+                _
+            ) = src_env.step(src_action)
+
+            src_done_bool = (
+                float(src_done)
+                if src_episode_timesteps
+                < src_env._max_episode_steps
+                else 0
+            )
+
+            if "antmaze" in args.env:
+
+                src_reward -= 1.0
+
+            src_replay_buffer.add(
+                src_state,
+                src_action,
+                src_next_state,
+                src_reward,
+                src_done_bool
+            )
+
+            src_state = src_next_state
+
+            src_episode_reward += src_reward
+
+            # Training
+
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config["batch_size"],
+                writer
+            )
+
+            # Source episode completion
+
+            if src_done:
+
+                print(
+                    "Total T: {} Episode Num: {} "
+                    "Episode T: {} Reward: {}".format(
+                        t + 1,
+                        src_episode_num + 1,
+                        src_episode_timesteps,
+                        src_episode_reward
+                    )
+                )
+
+                writer.add_scalar(
+                    "train/source return",
+                    src_episode_reward,
+                    global_step=t + 1
+                )
+
+                src_state = src_env.reset()
+
+                src_done = False
+
+                src_episode_reward = 0
+
+                src_episode_timesteps = 0
+
+                src_episode_num += 1
+
+            # Evaluation
+
+            if (t + 1) % config["eval_freq"] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    "test/source return",
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    "test/target return",
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = (
+                    get_normalized_score(
+                        tar_eval_return,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "test/target normalized score",
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+
+                    policy.save(
+                        "{}/models/model".format(outdir)
+                    )
+
+    # ========================================================
+    # MODE 3: OFFLINE SOURCE + OFFLINE TARGET
+    # ========================================================
+
+    else:
+
+        for t in range(int(config["max_step"])):
+
+            policy.train(
+                src_replay_buffer,
+                tar_replay_buffer,
+                config["batch_size"],
+                writer
+            )
+
+            # Evaluation
+
+            if (t + 1) % config["eval_freq"] == 0:
+
+                src_eval_return = eval_policy(
+                    policy,
+                    src_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                tar_eval_return = eval_policy(
+                    policy,
+                    tar_eval_env,
+                    eval_cnt=eval_cnt
+                )
+
+                writer.add_scalar(
+                    "test/source return",
+                    src_eval_return,
+                    global_step=t + 1
+                )
+
+                writer.add_scalar(
+                    "test/target return",
+                    tar_eval_return,
+                    global_step=t + 1
+                )
+
+                eval_normalized_score = (
+                    get_normalized_score(
+                        tar_eval_return,
+                        ref_env_name
+                    )
+                )
+
+                writer.add_scalar(
+                    "test/target normalized score",
+                    eval_normalized_score,
+                    global_step=t + 1
+                )
+
+                eval_cnt += 1
+
+                if args.save_model:
+
+                    policy.save(
+                        "{}/models/model".format(outdir)
+                    )
+
+    # ========================================================
+    # CLOSE LOGGING
+    # ========================================================
+
+    writer.close()
+
+    print("\n========================================")
+
+    print("TRAINING COMPLETED")
+
+    print("Policy:", args.policy)
+
+    print("Environment:", args.env)
+
+    print("Shift:", args.shift_level)
+
+    print("Seed:", args.seed)
+
+    print("Output directory:", outdir)
+
+    print("========================================")

@@ -18,7 +18,7 @@ update_interval: 2
 expl_noise: 0.2
 
 eval_episode: 10
-eval_freq: 10000
+eval_freq: 1000
 start_steps: 5000
 max_step: 1000000
 tar_env_interact_freq: 10

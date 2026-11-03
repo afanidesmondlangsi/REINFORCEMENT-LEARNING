@@ -1,0 +1,15 @@
+{
+    "eval_freq":  100,
+    "ucdgt_warmup":  256,
+    "ucdgt_train_steps":  20,
+    "ucdgt_cal_fraction":  0.2,
+    "ucdgt_ensemble_size":  3,
+    "ucdgt_dynamics_lr":  0.001,
+    "ucdgt_gate_tau":  10.0,
+    "ucdgt_source_scale":  1.0,
+    "ucdgt_gate_actor":  true,
+    "ucdgt_update_interval":  30,
+    "ucdgt_update_steps":  5,
+    "ucdgt_update_window":  128,
+    "ucdgt_enable_refresh":  false
+}

@@ -1,0 +1,131 @@
+﻿$ErrorActionPreference = "Stop"
+
+$root = "logs_ea_ntc_phase16d_retry1"
+$seeds = @(0, 1, 2)
+$shifts = @(0.1, 0.5)
+
+if (Test-Path $root) {
+    throw "ABORT: $root already exists. No logs will be overwritten."
+}
+
+$conditions = @(
+    @{
+        Name = "bc_sac"
+        Policy = "bc_sac"
+        Params = @{}
+    },
+    @{
+        Name = "unit_weights"
+        Policy = "ea_ntc_bc_sac"
+        Params = @{
+            ea_gate_bc = $true
+            ea_force_unit_weights = $true
+            ea_gate_uncertainty = $true
+            ea_uncertainty_temperature = 4.0
+            ea_reliability_mode = "relative"
+            ea_max_relative_error = 0.75
+            ea_min_dynamics_updates = 20
+            ea_dynamics_seed = 104729
+        }
+    },
+    @{
+        Name = "learned_weights"
+        Policy = "ea_ntc_bc_sac"
+        Params = @{
+            ea_gate_bc = $true
+            ea_force_unit_weights = $false
+            ea_gate_uncertainty = $true
+            ea_uncertainty_temperature = 4.0
+            ea_reliability_mode = "relative"
+            ea_max_relative_error = 0.75
+            ea_min_dynamics_updates = 20
+            ea_dynamics_seed = 104729
+        }
+    }
+)
+
+$jobs = @()
+
+foreach ($shift in $shifts) {
+    foreach ($seed in $seeds) {
+        foreach ($condition in $conditions) {
+
+            $outdir = Join-Path $root $condition.Name
+
+            $arguments = @(
+                ".\train.py",
+                "--policy", $condition.Policy,
+                "--env", "halfcheetah-friction",
+                "--shift_level", "$shift",
+                "--mode", "1",
+                "--srctype", "medium",
+                "--seed", "$seed",
+                "--max_step", "5000",
+                "--tar_env_interact_interval", "10",
+
+                "--dir", $outdir
+            )
+
+            if ($condition.Params.Count -gt 0) {
+                $json = ConvertTo-Json `
+                    -InputObject $condition.Params `
+                    -Compress
+
+                $arguments += @("--params", $json)
+            }
+
+            $jobs += [pscustomobject]@{
+                Condition = $condition.Name
+                Shift = $shift
+                Seed = $seed
+                Arguments = $arguments
+            }
+        }
+    }
+}
+
+Write-Host ""
+Write-Host "PHASE 16D EXPERIMENT PLAN"
+Write-Host "Total runs: $($jobs.Count)"
+Write-Host ""
+
+$jobs |
+    Select-Object Condition, Shift, Seed |
+    Format-Table -AutoSize
+
+$confirmation = Read-Host "Type RUN to start all experiments"
+
+if ($confirmation -cne "RUN") {
+    Write-Host "Cancelled. No experiments started."
+    exit
+}
+
+New-Item -ItemType Directory -Path $root | Out-Null
+
+$runNumber = 0
+
+foreach ($job in $jobs) {
+
+    $runNumber++
+
+    Write-Host ""
+    Write-Host "=============================================="
+    Write-Host "RUN $runNumber / $($jobs.Count)"
+    Write-Host "Condition: $($job.Condition)"
+    Write-Host "Friction: $($job.Shift)"
+    Write-Host "Seed: $($job.Seed)"
+    Write-Host "=============================================="
+
+    & python @($job.Arguments)
+
+    if ($LASTEXITCODE -ne 0) {
+        throw "Training failed on run $runNumber. Stopping."
+    }
+}
+
+Write-Host ""
+Write-Host "PHASE 16D COMPLETE"
+
+
+
+

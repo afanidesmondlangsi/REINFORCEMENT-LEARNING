@@ -1,0 +1,1969 @@
+========== EA-NTC IMPLEMENTATION ==========
+
+import copy
+import math
+import numpy as np
+import torch
+import torch.nn.functional as F
+
+from offline_online.bc_sac import BCSAC
+from offline_online.ea_ntc.compatibility import weighted_bc_loss
+from offline_online.ea_ntc.dynamics import TargetDynamicsEnsemble
+from offline_online.ea_ntc.calibration import TargetErrorCalibrator
+from offline_online.ea_ntc.adaptive_gate import AdaptiveGateController
+from offline_online.ea_ntc.adaptive_bc import AdaptiveBCController
+from offline_online.ea_ntc.transfer_quality_controller import (
+    TransferQualityController,
+    TransferQualityConfig,
+)
+
+
+class EANTCBCSAC(BCSAC):
+    """
+    EA-NTC optional mismatch and uncertainty gating.
+
+    - Original BC-SAC critic update
+    - Original SAC actor objective
+    - Calibrated source behavioral-cloning weights
+    - Target-only dynamics ensemble
+    """
+
+    def __init__(self, config, device):
+        super().__init__(config, device)
+
+        self.ea_enabled = bool(
+            config.get("ea_gate_bc", True)
+        )
+        # Phase 16B diagnostic: train dynamics normally,
+        # but prevent source weights from changing the BC loss.
+        self.ea_force_unit_weights = bool(
+            config.get("ea_force_unit_weights", False)
+        )
+
+        # Phase 16E: controlled gate-strength ablation.
+        self.ea_gate_strength = float(
+            config.get("ea_gate_strength", 1.0)
+        )
+        if not 0.0 <= self.ea_gate_strength <= 1.0:
+            raise ValueError(
+                "ea_gate_strength must be between 0 and 1"
+            )
+
+        # Phase 17: optional training-only adaptive gate.
+        self.ea_adaptive_gate = bool(
+            config.get("ea_adaptive_gate", False)
+        )
+
+        self.ea_adaptive_controller = AdaptiveGateController(
+            max_strength=float(
+                config.get("ea_adaptive_max_strength", 0.50)
+            ),
+            error_low=float(
+                config.get("ea_adaptive_error_low", 0.35)
+            ),
+            error_high=float(
+                config.get("ea_adaptive_error_high", 0.75)
+            ),
+        )
+
+        self.ea_last_adaptive_strength = (
+            0.0 if self.ea_adaptive_gate
+            else self.ea_gate_strength
+        )
+
+        self.ea_transfer_quality_enabled = bool(
+            config.get("ea_transfer_quality_enabled", False)
+        )
+        self.ea_tq_interval = int(config.get("ea_tq_interval", 100))
+        self.ea_tq_batch_size = int(config.get("ea_tq_batch_size", 64))
+        self.ea_tq_probe_lr = float(
+            config.get("ea_tq_probe_lr", config["actor_lr"])
+        )
+        self.ea_tq_controller = TransferQualityController(
+            TransferQualityConfig(
+                max_strength=float(
+                    config.get("ea_tq_max_strength", 0.5)
+                ),
+                error_low=float(
+                    config.get("ea_adaptive_error_low", 0.35)
+                ),
+                error_high=float(
+                    config.get("ea_adaptive_error_high", 0.75)
+                ),
+                uncertainty_penalty=float(
+                    config.get("ea_tq_uncertainty_penalty", 1.0)
+                ),
+                margin=float(config.get("ea_tq_margin", 0.0)),
+                temperature=float(
+                    config.get("ea_tq_temperature", 0.1)
+                ),
+                ema_decay=float(
+                    config.get("ea_tq_ema_decay", 0.9)
+                ),
+            )
+        )
+        self.ea_adaptive_bc_enabled = bool(
+            config.get("ea_adaptive_bc_enabled", False)
+        )
+
+        self.ea_bc_controller = AdaptiveBCController(
+            confidence_multiplier=float(
+                config.get("ea_bc_confidence_multiplier", 2.0)
+            ),
+            margin=float(
+                config.get("ea_bc_quality_margin", 0.0)
+            ),
+            uncertainty_scale=float(
+                config.get("ea_bc_uncertainty_scale", 2.0)
+            ),
+            max_coefficient=float(
+                config.get("ea_bc_max_coefficient", 1.0)
+            ),
+        )
+
+        self.ea_bc_coefficient = (
+            0.0 if self.ea_adaptive_bc_enabled else 1.0
+        )
+
+        if (
+            self.ea_adaptive_bc_enabled
+            and not self.ea_transfer_quality_enabled
+        ):
+            raise ValueError(
+                "Adaptive BC requires transfer quality to be enabled"
+            )
+
+        self.ea_tq_strength = 0.0
+        self.ea_tq_quality = None
+        self.ea_tq_uncertainty = None
+
+        if self.ea_transfer_quality_enabled:
+            if not self.ea_enabled:
+                raise ValueError("Transfer quality requires ea_gate_bc=true")
+            if self.ea_tq_interval <= 0 or self.ea_tq_batch_size < 2:
+                raise ValueError("Invalid transfer-quality probe schedule")
+            if self.ea_tq_probe_lr <= 0:
+                raise ValueError("Invalid transfer-quality probe learning rate")
+
+        self.ea_bc_reduction = config.get(
+            "ea_bc_reduction", "mean"
+        )
+        if self.ea_bc_reduction not in ("mean", "normalized"):
+            raise ValueError(
+                "ea_bc_reduction must be 'mean' or 'normalized'"
+            )
+
+        self.ea_warmup = int(
+            config.get("ea_warmup_target_steps", 256)
+        )
+
+        self.ea_update_interval = int(
+            config.get("ea_dynamics_update_interval", 30)
+        )
+
+        self.ea_calibration_interval = int(
+            config.get("ea_calibration_update_interval", 30)
+        )
+
+        self.ea_batch_size = int(
+            config.get("ea_dynamics_batch_size", 128)
+        )
+
+        if self.ea_update_interval <= 0:
+            raise ValueError("Invalid dynamics update interval")
+
+        if self.ea_calibration_interval <= 0:
+            raise ValueError("Invalid calibration interval")
+
+        if self.ea_batch_size <= 0:
+            raise ValueError("Invalid dynamics batch size")
+
+        # Phase 16: dedicated NumPy RNG for auxiliary dynamics sampling.
+        # This must not advance the global replay-sampling RNG.
+        self.ea_rng = np.random.RandomState(
+            int(config.get("ea_dynamics_seed", 104729))
+        )
+
+        # Preserve the global PyTorch RNG state during auxiliary
+        # ensemble initialization.
+        cuda_devices = []
+        if torch.device(device).type == "cuda":
+            cuda_index = torch.device(device).index
+            if cuda_index is None:
+                cuda_index = torch.cuda.current_device()
+            cuda_devices = [cuda_index]
+
+        with torch.random.fork_rng(devices=cuda_devices):
+            torch.manual_seed(
+                int(config.get("ea_dynamics_seed", 104729))
+            )
+            if cuda_devices:
+                torch.cuda.manual_seed_all(
+                    int(config.get("ea_dynamics_seed", 104729))
+                )
+
+            self.dynamics = TargetDynamicsEnsemble(
+                state_dim=config["state_dim"],
+                action_dim=config["action_dim"],
+                device=device,
+                ensemble_size=int(
+                    config.get("ea_ensemble_size", 3)
+                ),
+                hidden_size=int(
+                    config.get("ea_hidden_size", 256)
+                ),
+            )
+
+        self.calibrator = TargetErrorCalibrator(
+            gate_temperature=float(
+                config.get("ea_gate_temperature", 1.0)
+            )
+        )
+
+        self.ea_gate_ready = False
+        self.ea_reliability_mode = config.get(
+            "ea_reliability_mode", "absolute"
+        )
+        self.ea_max_relative_error = float(
+            config.get("ea_max_relative_error", 0.75)
+        )
+        self.ea_last_baseline_error = None
+        self.ea_last_relative_error = None
+        self.ea_dynamics_updates = 0
+
+        # Reliability gate: require enough dynamics training and
+        # sufficiently low held-out target prediction error.
+        self.ea_min_dynamics_updates = int(
+            config.get("ea_min_dynamics_updates", 20)
+        )
+        self.ea_max_calibration_error = float(
+            config.get("ea_max_calibration_error", 0.05)
+        )
+        if self.ea_min_dynamics_updates < 1:
+            raise ValueError("ea_min_dynamics_updates must be positive")
+        if not np.isfinite(self.ea_max_calibration_error) or self.ea_max_calibration_error <= 0:
+            raise ValueError("ea_max_calibration_error must be finite and positive")
+        self.ea_last_calibration_error = None
+        # Optional uncertainty ablation; disabled by default to preserve Phase 7.
+        self.ea_uncertainty_enabled = bool(config.get("ea_gate_uncertainty", False))
+        self.ea_uncertainty_temperature = float(config.get("ea_uncertainty_temperature", 1.0))
+        self.ea_uncertainty_min_reference = float(config.get("ea_uncertainty_min_reference", 1e-6))
+        if not np.isfinite(self.ea_uncertainty_temperature) or self.ea_uncertainty_temperature <= 0:
+            raise ValueError("ea_uncertainty_temperature must be finite and positive")
+        if not np.isfinite(self.ea_uncertainty_min_reference) or self.ea_uncertainty_min_reference <= 0:
+            raise ValueError("ea_uncertainty_min_reference must be finite and positive")
+        self.ea_target_uncertainty_reference = None
+        self.ea_last_uncertainty_penalty = None
+
+        # Fixed initial calibration block, separated from dynamics training.
+        self.ea_calibration_fraction = float(config.get("ea_calibration_fraction", 0.20))
+        self.ea_calibration_gap = int(config.get("ea_calibration_gap", 8))
+        if not 0.0 < self.ea_calibration_fraction < 0.5:
+            raise ValueError("ea_calibration_fraction must be between 0 and 0.5")
+        if self.ea_calibration_gap < 0:
+            raise ValueError("ea_calibration_gap must be nonnegative")
+        self.ea_last_calibration_count = 0
+        self.ea_last_training_count = 0
+        self.ea_last_effective_sample_size = None
+        self.ea_last_downweighted_fraction = None
+        self.ea_last_weights = None
+        self.ea_last_uncertainty = None
+
+    def _target_batch(self, replay_buffer, indices):
+        """
+        Fetch selected target transitions without changing
+        the original ReplayBuffer implementation.
+        """
+        state = torch.as_tensor(
+            replay_buffer.state[indices],
+            dtype=torch.float32,
+            device=self.device,
+        )
+
+        action = torch.as_tensor(
+            replay_buffer.action[indices],
+            dtype=torch.float32,
+            device=self.device,
+        )
+
+        next_state = torch.as_tensor(
+            replay_buffer.next_state[indices],
+            dtype=torch.float32,
+            device=self.device,
+        )
+
+        return state, action, next_state
+
+    def update_dynamics_and_calibration(
+        self, tar_replay_buffer
+    ):
+        """Train on later target transitions; calibrate on a fixed early block.
+
+        The initial holdout never enters ensemble training. A temporal gap
+        reduces immediate adjacency, but does not remove trajectory dependence.
+        Replay-buffer wraparound is unsupported: fail rather than leak data.
+        """
+        if not self.ea_enabled:
+            return
+
+        size = int(tar_replay_buffer.size)
+        if size < self.ea_warmup:
+            return
+        if size >= int(tar_replay_buffer.max_size):
+            raise RuntimeError(
+                "EA-NTC fixed calibration holdout requires a non-wrapping "
+                "target replay buffer; increase max_size or redesign the split."
+            )
+
+        calibration_count = max(2, int(self.ea_warmup * self.ea_calibration_fraction))
+        calibration_indices = np.arange(0, calibration_count)
+        train_indices = np.arange(calibration_count + self.ea_calibration_gap, size)
+        self.ea_last_calibration_count = len(calibration_indices)
+        self.ea_last_training_count = len(train_indices)
+
+        if (
+            len(train_indices) < 2
+            or len(calibration_indices) < 2
+        ):
+            return
+
+        if (
+            self.total_it % self.ea_update_interval == 0
+            or self.ea_dynamics_updates == 0
+        ):
+            selected = self.ea_rng.choice(
+                train_indices,
+                size=self.ea_batch_size,
+                replace=len(train_indices) < self.ea_batch_size,
+            )
+
+            state, action, next_state = (
+                self._target_batch(
+                    tar_replay_buffer, selected
+                )
+            )
+
+            self.dynamics.train_step(
+                state, action, next_state
+            )
+
+            self.ea_dynamics_updates += 1
+
+        if (
+            self.ea_dynamics_updates > 0
+            and (
+                self.total_it
+                % self.ea_calibration_interval == 0
+                or not self.ea_gate_ready
+            )
+        ):
+            state, action, next_state = (
+                self._target_batch(
+                    tar_replay_buffer,
+                    calibration_indices,
+                )
+            )
+
+            errors, uncertainty = (
+                self.dynamics.mismatch(
+                    state, action, next_state
+                )
+            )
+
+            self.calibrator.fit(errors)
+            # Calibrate uncertainty on the same held-out target partition.
+            # Clamp only the reference, not individual uncertainty measurements.
+            if not torch.isfinite(uncertainty).all() or torch.any(uncertainty < 0):
+                self.ea_target_uncertainty_reference = None
+                self.ea_gate_ready = False
+                return
+            self.ea_target_uncertainty_reference = max(
+                torch.median(uncertainty.reshape(-1)).item(),
+                self.ea_uncertainty_min_reference,
+            )
+            heldout_error = errors.mean().item()
+            self.ea_last_calibration_error = heldout_error
+
+            # Phase 11: scale-aware diagnostics only.
+            # The existing gate criterion remains unchanged.
+            with torch.no_grad():
+                observed_delta = next_state - state
+
+                baseline_error = (
+                    observed_delta.pow(2)
+                    .mean(dim=-1)
+                    .mean()
+                    .item()
+                )
+
+                relative_error = heldout_error / max(
+                    baseline_error, 1e-8
+                )
+
+            self.ea_last_baseline_error = baseline_error
+            self.ea_last_relative_error = relative_error
+            # Phase 12: selectable reliability criterion.
+            if self.ea_reliability_mode == "relative":
+                reliable_error = (
+                    np.isfinite(relative_error)
+                    and relative_error <= self.ea_max_relative_error
+                )
+            elif self.ea_reliability_mode == "absolute":
+                reliable_error = (
+                    np.isfinite(heldout_error)
+                    and heldout_error <= self.ea_max_calibration_error
+                )
+            else:
+                raise ValueError(
+                    "Unknown EA-NTC reliability mode: "
+                    + str(self.ea_reliability_mode)
+                )
+
+            self.ea_gate_ready = (
+                self.ea_dynamics_updates >= self.ea_min_dynamics_updates
+                and reliable_error
+            )
+
+    @torch.no_grad()
+    def source_weights(
+        self,
+        src_state,
+        src_action,
+        src_next_state,
+    ):
+        if (
+            not self.ea_enabled
+            or self.ea_force_unit_weights
+            or not self.ea_gate_ready
+        ):
+            return torch.ones(
+                src_state.shape[0],
+                device=src_state.device,
+            )
+
+        mismatch, uncertainty = self.dynamics.mismatch(
+            src_state,
+            src_action,
+            src_next_state,
+        )
+
+        weights = self.calibrator.weights(mismatch)
+        self.ea_last_uncertainty_penalty = None
+        if self.ea_uncertainty_enabled:
+            reference = self.ea_target_uncertainty_reference
+            if reference is None:
+                # Conservative abstention if uncertainty was never calibrated.
+                return torch.zeros_like(weights)
+            if not torch.isfinite(uncertainty).all() or torch.any(uncertainty < 0):
+                return torch.zeros_like(weights)
+            ratio = uncertainty / reference
+            excess = torch.clamp(ratio - 1.0, min=0.0)
+            penalty = torch.exp(-excess / self.ea_uncertainty_temperature)
+            self.ea_last_uncertainty_penalty = penalty.detach()
+            weights = weights * penalty
+
+        # Store diagnostics without affecting gradients.
+        self.ea_last_uncertainty = (
+            uncertainty.detach()
+        )
+
+        # Preserve original weights for diagnostics.
+        self.ea_last_raw_source_weights = weights.detach()
+
+        # Phase 17: select gate strength using training-only
+        # held-out dynamics diagnostics when adaptive mode is enabled.
+        if self.ea_transfer_quality_enabled:
+            strength = self.ea_tq_strength
+        elif self.ea_adaptive_gate:
+            strength = self.ea_adaptive_controller.strength(
+                self.ea_last_relative_error,
+                self.ea_gate_ready,
+            )
+        else:
+            strength = self.ea_gate_strength
+
+        self.ea_last_adaptive_strength = strength
+
+        weights = 1.0 - strength * (1.0 - weights)
+
+        return weights
+
+
+    def _transfer_quality_probe(
+        self, tar_replay_buffer, src_state, src_action,
+        raw_source_weights,
+    ):
+        # Preserve the training RNG across the entire diagnostic.
+        devices = []
+        if torch.device(self.device).type == "cuda":
+            index = torch.device(self.device).index
+            if index is None:
+                index = torch.cuda.current_device()
+            devices = [index]
+
+        with torch.random.fork_rng(devices=devices):
+            return self._transfer_quality_probe_impl(
+                tar_replay_buffer,
+                src_state,
+                src_action,
+                raw_source_weights,
+            )
+
+    def _transfer_quality_probe_impl(
+        self, tar_replay_buffer, src_state, src_action,
+        raw_source_weights,
+    ):
+        """Training-only paired actor-update diagnostic.
+
+        This is a one-step critic-based proxy, not measured policy return.
+        Probe actors are discarded; the live actor and optimizer are unchanged.
+        """
+        if not self.ea_gate_ready:
+            return
+
+        size = int(tar_replay_buffer.size)
+        count = min(self.ea_tq_batch_size, size)
+
+        if count < 2:
+            return
+
+        # Use a fixed early target-state block, excluded from
+        # dynamics-ensemble fitting by the existing calibration split.
+        indices = np.arange(count)
+        target_states, _, _ = self._target_batch(
+            tar_replay_buffer, indices
+        )
+
+        # Independent temporary actors.
+        source_actor = copy.deepcopy(self.policy)
+        target_actor = copy.deepcopy(self.policy)
+
+        source_actor.train()
+        target_actor.train()
+
+        # The same RNG state is used for corresponding stochastic
+        # action samples. fork_rng restores the global RNG afterward.
+        devices = []
+        if torch.device(self.device).type == "cuda":
+            idx = torch.device(self.device).index
+            if idx is None:
+                idx = torch.cuda.current_device()
+            devices = [idx]
+
+        def actor_objective(actor, include_source):
+            sampled_action, logprob, _ = actor(
+                target_states, get_logprob=True
+            )
+            q1, q2 = self.q_funcs(target_states, sampled_action)
+            qvalue = torch.min(q1, q2)
+
+            scale = (
+                self.config["weight"]
+                / qvalue.abs().mean().detach().clamp(min=1e-8)
+            )
+            loss = scale * (
+                self.alpha.detach() * logprob - qvalue
+            ).mean()
+
+            if include_source:
+                predicted, _, _ = actor(
+                    src_state, get_logprob=True
+                )
+                bc = (predicted - src_action).pow(2).mean(dim=-1)
+
+                if self.ea_bc_reduction == "normalized":
+                    bc_loss = (
+                        (raw_source_weights * bc).sum()
+                        / raw_source_weights.sum().clamp(min=1e-8)
+                    )
+                else:
+                    bc_loss = (raw_source_weights * bc).mean()
+
+                loss = loss + bc_loss
+
+            return loss
+
+        def temporary_step(actor, include_source):
+            loss = actor_objective(actor, include_source)
+            parameters = tuple(actor.parameters())
+            gradients = torch.autograd.grad(loss, parameters)
+            with torch.no_grad():
+                for parameter, gradient in zip(parameters, gradients):
+                    parameter.add_(
+                        gradient, alpha=-self.ea_tq_probe_lr
+                    )
+
+        # Critic parameters remain frozen, but Q derivatives with
+        # respect to actor actions remain available.
+        with torch.random.fork_rng(devices=devices):
+            torch.manual_seed(77123 + int(self.total_it))
+            temporary_step(source_actor, True)
+
+            torch.manual_seed(77123 + int(self.total_it))
+            temporary_step(target_actor, False)
+
+        with torch.no_grad():
+            _, _, source_mean = source_actor(target_states)
+            _, _, target_mean = target_actor(target_states)
+
+            source_q1, source_q2 = self.q_funcs(
+                target_states, source_mean
+            )
+            target_q1, target_q2 = self.q_funcs(
+                target_states, target_mean
+            )
+
+            difference = (
+                torch.min(source_q1, source_q2)
+                - torch.min(target_q1, target_q2)
+            ).reshape(-1)
+
+            quality = difference.mean().item()
+            uncertainty = (
+                difference.std(unbiased=True).item()
+                / math.sqrt(difference.numel())
+            )
+
+        if not (
+            math.isfinite(quality)
+            and math.isfinite(uncertainty)
+        ):
+            return
+
+        self.ea_tq_quality = quality
+        self.ea_tq_uncertainty = uncertainty
+
+        if self.ea_adaptive_bc_enabled:
+            self.ea_bc_coefficient = self.ea_bc_controller.update(
+                quality, uncertainty
+            )
+        self.ea_tq_strength = self.ea_tq_controller.update(
+            relative_error=self.ea_last_relative_error,
+            quality=quality,
+            uncertainty=uncertainty,
+        )
+
+    def update_policy_and_temp(
+        self,
+        state_batch,
+        src_state_batch,
+        src_action_batch,
+        source_weights=None,
+    ):
+        action_batch, logprobs_batch, _ = (
+            self.policy(
+                state_batch,
+                get_logprob=True,
+            )
+        )
+
+        q_b1, q_b2 = self.q_funcs(
+            state_batch,
+            action_batch,
+        )
+
+        qval_batch = torch.min(q_b1, q_b2)
+
+        p_w = (
+            self.config["weight"]
+            / qval_batch.abs().mean().detach()
+        )
+
+        pred_src_act, _, _ = self.policy(
+            src_state_batch,
+            get_logprob=True,
+        )
+
+        if source_weights is None:
+            source_weights = torch.ones(
+                src_state_batch.shape[0],
+                device=src_state_batch.device,
+            )
+
+        # Phase 17B: configurable BC-loss reduction.
+        # "mean" preserves the original implementation.
+        # "normalized" separates selection from mean-weight scaling.
+        per_transition_bc = (
+            pred_src_act - src_action_batch
+        ).pow(2).mean(dim=-1)
+
+        if self.ea_bc_reduction == "mean":
+            bc_loss = (
+                source_weights * per_transition_bc
+            ).mean()
+        else:
+            total_weight = source_weights.sum()
+            bc_loss = (
+                (source_weights * per_transition_bc).sum()
+                / total_weight.clamp(min=1e-8)
+            )
+
+        policy_loss = (
+            p_w
+            * (
+                self.alpha * logprobs_batch
+                - qval_batch
+            ).mean()
+            + (self.ea_bc_coefficient * bc_loss)
+        )
+
+        temp_loss = (
+            -self.alpha
+            * (
+                logprobs_batch.detach()
+                + self.target_entropy
+            ).mean()
+        )
+
+        return policy_loss, temp_loss
+
+    def train(
+        self,
+        src_replay_buffer,
+        tar_replay_buffer,
+        batch_size=128,
+        writer=None,
+    ):
+        self.total_it += 1
+
+        # Dynamics can start updating before the
+        # original BC-SAC replay-size requirement.
+        self.update_dynamics_and_calibration(
+            tar_replay_buffer
+        )
+
+        if (
+            src_replay_buffer.size < batch_size
+            or tar_replay_buffer.size < batch_size
+        ):
+            return
+
+        (
+            src_state,
+            src_action,
+            src_next_state,
+            src_reward,
+            src_not_done,
+        ) = src_replay_buffer.sample(batch_size)
+
+        (
+            tar_state,
+            tar_action,
+            tar_next_state,
+            tar_reward,
+            tar_not_done,
+        ) = tar_replay_buffer.sample(batch_size)
+
+        state = torch.cat(
+            [src_state, tar_state], dim=0
+        )
+        action = torch.cat(
+            [src_action, tar_action], dim=0
+        )
+        next_state = torch.cat(
+            [src_next_state, tar_next_state], dim=0
+        )
+        reward = torch.cat(
+            [src_reward, tar_reward], dim=0
+        )
+        not_done = torch.cat(
+            [src_not_done, tar_not_done], dim=0
+        )
+
+        # Identical critic update to original BC-SAC.
+        q_loss_step = self.update_q_functions(
+            state,
+            action,
+            reward,
+            next_state,
+            not_done,
+            writer,
+        )
+
+        self.q_optimizer.zero_grad()
+        q_loss_step.backward()
+        self.q_optimizer.step()
+
+        self.update_target()
+
+        if (
+            self.ea_transfer_quality_enabled
+            and self.ea_gate_ready
+            and self.total_it % self.ea_tq_interval == 0
+        ):
+            # Probe the source weights under the previous gate setting.
+            # This avoids a circular dependency on the new strength.
+            probe_weights = self.source_weights(
+                src_state, src_action, src_next_state
+            )
+            raw_probe_weights = getattr(
+                self, "ea_last_raw_source_weights", None
+            )
+            if raw_probe_weights is not None:
+                # Isolate every stochastic operation in the probe,
+                # including stochastic samples made during evaluation.
+                probe_devices = []
+                if torch.device(self.device).type == "cuda":
+                    device_index = torch.device(self.device).index
+                    if device_index is None:
+                        device_index = torch.cuda.current_device()
+                    probe_devices = [device_index]
+
+                with torch.random.fork_rng(devices=probe_devices):
+                    self._transfer_quality_probe(
+                        tar_replay_buffer,
+                        src_state,
+                        src_action,
+                        raw_probe_weights.detach(),
+                    )
+
+        weights = self.source_weights(
+            src_state,
+            src_action,
+            src_next_state,
+        )
+
+        self.ea_last_weights = weights.detach()
+        if self.ea_enabled:
+            with torch.no_grad():
+                total = weights.sum()
+                squared = weights.square().sum()
+                self.ea_last_effective_sample_size = (
+                    (total.square() / squared).item() if squared.item() > 0 else 0.0
+                )
+                self.ea_last_downweighted_fraction = (
+                    (weights < 0.5).float().mean().item()
+                )
+
+        for p in self.q_funcs.parameters():
+            p.requires_grad = False
+
+        pi_loss_step, a_loss_step = (
+            self.update_policy_and_temp(
+                state,
+                src_state,
+                src_action,
+                source_weights=weights,
+            )
+        )
+
+        self.policy_optimizer.zero_grad()
+        pi_loss_step.backward()
+        self.policy_optimizer.step()
+
+        if self.config["temperature_opt"]:
+            self.temp_optimizer.zero_grad()
+            a_loss_step.backward()
+            self.temp_optimizer.step()
+
+        for p in self.q_funcs.parameters():
+            p.requires_grad = True
+
+        if writer is not None and self.total_it % 100 == 0 and self.ea_enabled:
+            writer.add_scalar("ea_ntc/target_calibration_count", self.ea_last_calibration_count, self.total_it)
+            writer.add_scalar("ea_ntc/target_dynamics_train_count", self.ea_last_training_count, self.total_it)
+            writer.add_scalar("ea_ntc/source_weight_ess", self.ea_last_effective_sample_size, self.total_it)
+            writer.add_scalar("ea_ntc/source_weight_below_0_5", self.ea_last_downweighted_fraction, self.total_it)
+            if self.ea_last_calibration_error is not None:
+                writer.add_scalar("ea_ntc/heldout_target_mse", self.ea_last_calibration_error, self.total_it)
+        if writer is not None and self.total_it % 100 == 0:
+            if self.ea_last_baseline_error is not None:
+                writer.add_scalar(
+                    "ea_ntc/heldout_zero_delta_mse",
+                    self.ea_last_baseline_error,
+                    self.total_it,
+                )
+
+            if self.ea_last_relative_error is not None:
+                writer.add_scalar(
+                    "ea_ntc/heldout_relative_mse",
+                    self.ea_last_relative_error,
+                    self.total_it,
+                )
+
+            writer.add_scalar(
+                "ea_ntc/mean_source_weight",
+                weights.mean().item(),
+                self.total_it,
+            )
+
+            if self.ea_adaptive_gate:
+                writer.add_scalar(
+                    "ea_ntc/adaptive_gate_strength",
+                    self.ea_last_adaptive_strength,
+                    self.total_it,
+                )
+
+                if (
+                    self.ea_gate_ready
+                    and hasattr(self, "ea_last_raw_source_weights")
+                ):
+                    writer.add_scalar(
+                        "ea_ntc/raw_mean_source_weight",
+                        self.ea_last_raw_source_weights.mean().item(),
+                        self.total_it,
+                    )
+
+            if self.ea_transfer_quality_enabled:
+                writer.add_scalar(
+                    "ea_ntc/source_bc_coefficient",
+                    self.ea_bc_coefficient,
+                    self.total_it,
+                )
+
+                if self.ea_bc_controller.last_lower_bound is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_quality_lower_bound",
+                        self.ea_bc_controller.last_lower_bound,
+                        self.total_it,
+                    )
+
+                writer.add_scalar(
+                    "ea_ntc/transfer_gate_strength",
+                    self.ea_tq_strength,
+                    self.total_it,
+                )
+                if self.ea_tq_quality is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_quality",
+                        self.ea_tq_quality,
+                        self.total_it,
+                    )
+                if self.ea_tq_uncertainty is not None:
+                    writer.add_scalar(
+                        "ea_ntc/transfer_uncertainty",
+                        self.ea_tq_uncertainty,
+                        self.total_it,
+                    )
+
+            writer.add_scalar(
+                "ea_ntc/gate_ready",
+                float(self.ea_gate_ready),
+                self.total_it,
+            )
+
+            writer.add_scalar(
+                "ea_ntc/dynamics_updates",
+                self.ea_dynamics_updates,
+                self.total_it,
+            )
+
+            if self.ea_target_uncertainty_reference is not None:
+                writer.add_scalar(
+                    "ea_ntc/target_uncertainty_reference",
+                    self.ea_target_uncertainty_reference,
+                    self.total_it,
+                )
+            if self.ea_last_uncertainty_penalty is not None:
+                writer.add_scalar(
+                    "ea_ntc/mean_uncertainty_penalty",
+                    self.ea_last_uncertainty_penalty.mean().item(),
+                    self.total_it,
+                )
+            if self.ea_last_uncertainty is not None:
+                writer.add_scalar(
+                    "ea_ntc/mean_uncertainty",
+                    self.ea_last_uncertainty.mean().item(),
+                    self.total_it,
+                )
+
+========== TRAINING LOOP REFERENCES ==========
+
+  train.py:26:    sys.path.insert(0, _ALGO_DIR)
+  train.py:27:
+  train.py:28:from algo.call_algo import call_algo
+  train.py:29:from dataset.call_dataset import call_tar_dataset
+  train.py:30:from envs.mujoco.call_mujoco_env import call_mujoco_env
+  train.py:31:from envs.adroit.call_adroit_env import call_adroit_env
+  train.py:32:from envs.antmaze.call_antmaze_env import call_antmaze_env
+  train.py:33:from envs.infos import get_normalized_score
+> train.py:34:from tensorboardX import SummaryWriter
+  train.py:35:
+  train.py:36:
+  train.py:37:# ============================================================
+> train.py:38:# EVALUATION
+  train.py:39:# ============================================================
+  train.py:40:
+> train.py:41:def eval_policy(policy, env, eval_episodes=10, eval_cnt=None):
+  train.py:42:
+  train.py:43:    avg_reward = 0.
+  train.py:44:
+> train.py:45:    for episode_idx in range(eval_episodes):
+  train.py:46:
+  train.py:47:        state, done = env.reset(), False
+  train.py:48:
+  train.py:49:        while not done:
+  train.py:50:
+  train.py:51:            action = policy.select_action(np.array(state))
+  train.py:52:
+  train.py:53:            next_state, reward, done, _ = env.step(action)
+  train.py:54:
+  train.py:55:            avg_reward += reward
+  train.py:56:
+  train.py:57:            state = next_state
+  train.py:58:
+> train.py:59:    avg_reward /= eval_episodes
+  train.py:60:
+  train.py:61:    print(
+> train.py:62:        "[{}] Evaluation over {} episodes: {}".format(
+> train.py:63:            eval_cnt,
+> train.py:64:            eval_episodes,
+  train.py:65:            avg_reward
+  train.py:66:        )
+  train.py:67:    )
+  train.py:68:
+  train.py:69:    return avg_reward
+  train.py:70:
+  train.py:71:
+  train.py:72:# ============================================================
+  train.py:73:# MEMORY-SAFE REWARD PROCESSING
+  train.py:74:# ============================================================
+  train.py:75:
+  train.py:76:def shift_rewards_in_chunks(
+  train.py:138:
+  train.py:139:
+  train.py:140:if __name__ == "__main__":
+  train.py:141:
+  train.py:142:    parser = argparse.ArgumentParser()
+  train.py:143:
+  train.py:144:    parser.add_argument(
+  train.py:145:        "--dir",
+> train.py:146:        default="./logs"
+  train.py:147:    )
+  train.py:148:
+  train.py:149:    parser.add_argument(
+  train.py:150:        "--policy",
+  train.py:151:        default="SAC",
+  train.py:152:        help="policy to use"
+  train.py:153:    )
+  train.py:154:
+  train.py:155:    parser.add_argument(
+  train.py:156:        "--env",
+  train.py:157:        default="halfcheetah-friction"
+  train.py:158:    )
+  train.py:187:
+  train.py:188:    parser.add_argument(
+  train.py:189:        "--seed",
+  train.py:190:        default=0,
+  train.py:191:        type=int
+  train.py:192:    )
+  train.py:193:
+  train.py:194:    parser.add_argument(
+> train.py:195:        "--save-model",
+  train.py:196:        action="store_true"
+  train.py:197:    )
+  train.py:198:
+  train.py:199:    parser.add_argument(
+  train.py:200:        "--tar_env_interact_interval",
+  train.py:201:        default=10,
+  train.py:202:        type=int
+  train.py:203:    )
+  train.py:204:
+  train.py:205:    parser.add_argument(
+  train.py:206:        "--max_step",
+  train.py:207:        default=int(1e6),
+  train.py:320:                src_env_name
+  train.py:321:                + "-"
+  train.py:322:                + args.srctype
+  train.py:323:                + "-v2"
+  train.py:324:            )
+  train.py:325:
+  train.py:326:        src_env = None
+  train.py:327:
+> train.py:328:        src_eval_env = gym.make(src_env_name)
+  train.py:329:
+> train.py:330:        src_eval_env.seed(args.seed)
+  train.py:331:
+  train.py:332:    else:
+  train.py:333:
+  train.py:334:        src_env_config = {
+  train.py:335:
+  train.py:336:            "env_name": src_env_name,
+  train.py:337:
+  train.py:338:            "shift_level": None,
+  train.py:339:
+  train.py:340:        }
+  train.py:341:
+  train.py:342:        src_env = call_env[domain](src_env_config)
+  train.py:343:
+  train.py:344:        src_env.seed(args.seed)
+  train.py:345:
+  train.py:346:        if "antmaze" in src_env_name:
+  train.py:347:
+> train.py:348:            src_eval_env = call_env[domain](
+  train.py:349:                src_env_config
+  train.py:350:            )
+  train.py:351:
+  train.py:352:        else:
+  train.py:353:
+> train.py:354:            src_eval_env = copy.deepcopy(src_env)
+  train.py:355:
+> train.py:356:        src_eval_env.seed(args.seed + 100)
+  train.py:357:
+  train.py:358:    # --------------------------------------------------------
+  train.py:359:    # TARGET ENVIRONMENT
+  train.py:360:    # --------------------------------------------------------
+  train.py:361:
+  train.py:362:    tar_env_config = {
+  train.py:363:
+  train.py:364:        "env_name": tar_env_name,
+  train.py:365:
+  train.py:366:        "shift_level": args.shift_level,
+  train.py:367:
+  train.py:368:        "corrected_hopper_friction":
+  train.py:369:            args.corrected_hopper_friction,
+  train.py:370:
+  train.py:371:    }
+  train.py:372:
+  train.py:373:    if args.mode in (2, 3):
+  train.py:374:
+  train.py:375:        tar_env = None
+  train.py:376:
+> train.py:377:        tar_eval_env = call_env[domain](
+  train.py:378:            tar_env_config
+  train.py:379:        )
+  train.py:380:
+> train.py:381:        tar_eval_env.seed(args.seed + 100)
+  train.py:382:
+  train.py:383:    else:
+  train.py:384:
+  train.py:385:        tar_env = call_env[domain](
+  train.py:386:            tar_env_config
+  train.py:387:        )
+  train.py:388:
+  train.py:389:        tar_env.seed(args.seed)
+  train.py:390:
+> train.py:391:        tar_eval_env = call_env[domain](
+  train.py:392:            tar_env_config
+  train.py:393:        )
+  train.py:394:
+> train.py:395:        tar_eval_env.seed(args.seed + 100)
+  train.py:396:
+  train.py:397:    if args.mode not in [0, 1, 2, 3]:
+  train.py:398:
+  train.py:399:        raise NotImplementedError(
+> train.py:400:            "Invalid training mode."
+  train.py:401:        )
+  train.py:402:
+  train.py:403:    # --------------------------------------------------------
+  train.py:404:    # LOAD CONFIGURATION
+  train.py:405:    # --------------------------------------------------------
+  train.py:406:
+  train.py:407:    policy_config_name = args.policy.lower()
+  train.py:408:
+  train.py:409:    config_path = (
+  train.py:410:        Path(__file__).parent.absolute()
+  train.py:411:        / "config"
+  train.py:412:        / domain
+  train.py:426:
+  train.py:427:        # ----------------------------------------------------
+  train.py:428:        # ROBUST PARAMETER LOADING
+  train.py:429:        #
+  train.py:430:        # Accept either:
+  train.py:431:        #   1. A path to a JSON file:
+  train.py:432:        #        --params .\\test_params.json
+  train.py:433:        #   2. Inline JSON:
+> train.py:434:        #        --params "{\\"eval_freq\\":1000}"
+  train.py:435:        #
+  train.py:436:        # Reading a file is recommended on Windows PowerShell
+  train.py:437:        # because it avoids command-line quote-escaping errors.
+  train.py:438:        # ----------------------------------------------------
+  train.py:439:
+  train.py:440:        params_argument = os.path.expandvars(
+  train.py:441:            os.path.expanduser(str(args.params).strip())
+  train.py:442:        )
+  train.py:443:
+  train.py:444:        if os.path.isfile(params_argument):
+  train.py:445:
+  train.py:446:            params_path = os.path.abspath(params_argument)
+  train.py:483:        if not isinstance(override_params, dict):
+  train.py:484:            raise TypeError(
+  train.py:485:                "The parameters supplied through --params must be a "
+  train.py:486:                "JSON object/dictionary, not {}.".format(
+  train.py:487:                    type(override_params).__name__
+  train.py:488:                )
+  train.py:489:            )
+  train.py:490:
+> train.py:491:        config.update(override_params)
+  train.py:492:
+> train.py:493:        print("Updated parameters:", override_params)
+  train.py:494:
+  train.py:495:    print("----------------------------------------")
+  train.py:496:
+  train.py:497:    print(
+  train.py:498:        "Policy: {}, Environment: {}, Seed: {}".format(
+  train.py:499:            args.policy,
+  train.py:500:            args.env,
+  train.py:501:            args.seed
+  train.py:502:        )
+  train.py:503:    )
+  train.py:504:
+  train.py:505:    print("----------------------------------------")
+  train.py:572:            + str(args.seed)
+  train.py:573:        )
+  train.py:574:
+  train.py:575:    os.makedirs(
+  train.py:576:        outdir,
+  train.py:577:        exist_ok=True
+  train.py:578:    )
+  train.py:579:
+> train.py:580:    writer = SummaryWriter(
+  train.py:581:        os.path.join(outdir, "tb")
+  train.py:582:    )
+  train.py:583:
+> train.py:584:    if args.save_model:
+  train.py:585:
+  train.py:586:        os.makedirs(
+  train.py:587:            os.path.join(outdir, "models"),
+  train.py:588:            exist_ok=True
+  train.py:589:        )
+  train.py:590:
+  train.py:591:    # --------------------------------------------------------
+  train.py:592:    # RANDOM SEEDS
+  train.py:593:    # --------------------------------------------------------
+  train.py:594:
+  train.py:595:    if src_env is not None:
+  train.py:596:
+  train.py:597:        src_env.action_space.seed(args.seed)
+  train.py:598:
+  train.py:599:    if tar_env is not None:
+  train.py:600:
+  train.py:601:        tar_env.action_space.seed(args.seed)
+  train.py:602:
+> train.py:603:    src_eval_env.action_space.seed(args.seed)
+  train.py:604:
+> train.py:605:    tar_eval_env.action_space.seed(args.seed)
+  train.py:606:
+  train.py:607:    torch.manual_seed(args.seed)
+  train.py:608:
+  train.py:609:    np.random.seed(args.seed)
+  train.py:610:
+  train.py:611:    random.seed(args.seed)
+  train.py:612:
+  train.py:613:    torch.backends.cudnn.deterministic = True
+  train.py:614:
+  train.py:615:    torch.backends.cudnn.benchmark = False
+  train.py:616:
+  train.py:617:    if torch.cuda.is_available():
+  train.py:618:
+  train.py:619:        torch.cuda.manual_seed_all(args.seed)
+  train.py:620:
+  train.py:621:    # --------------------------------------------------------
+  train.py:622:    # ENVIRONMENT DIMENSIONS
+  train.py:623:    # --------------------------------------------------------
+  train.py:624:
+  train.py:625:    state_dim = (
+> train.py:626:        src_eval_env.observation_space.shape[0]
+  train.py:627:    )
+  train.py:628:
+  train.py:629:    action_dim = (
+> train.py:630:        src_eval_env.action_space.shape[0]
+  train.py:631:    )
+  train.py:632:
+  train.py:633:    max_action = float(
+> train.py:634:        src_eval_env.action_space.high[0]
+  train.py:635:    )
+  train.py:636:
+  train.py:637:    min_action = -max_action
+  train.py:638:
+  train.py:639:    device = torch.device(
+  train.py:640:        "cuda" if torch.cuda.is_available()
+  train.py:641:        else "cpu"
+  train.py:642:    )
+  train.py:643:
+  train.py:644:    print("Device:", device)
+  train.py:645:
+  train.py:646:    print("State dimension:", state_dim)
+  train.py:666:            shift_level = float(
+  train.py:667:                args.shift_level
+  train.py:668:            )
+  train.py:669:
+  train.py:670:    else:
+  train.py:671:
+  train.py:672:        shift_level = args.shift_level
+  train.py:673:
+> train.py:674:    config.update({
+  train.py:675:
+  train.py:676:        "env_name": args.env,
+  train.py:677:
+  train.py:678:        "state_dim": state_dim,
+  train.py:679:
+  train.py:680:        "action_dim": action_dim,
+  train.py:681:
+  train.py:682:        "max_action": max_action,
+  train.py:683:
+  train.py:684:        "tar_env_interact_interval":
+  train.py:685:            int(args.tar_env_interact_interval),
+  train.py:686:
+  train.py:701:        device
+  train.py:702:    )
+  train.py:703:
+  train.py:704:    # --------------------------------------------------------
+  train.py:705:    # WRITE CONFIGURATION
+  train.py:706:    # --------------------------------------------------------
+  train.py:707:
+  train.py:708:    with open(
+> train.py:709:        os.path.join(outdir, "log.txt"),
+  train.py:710:        "w",
+  train.py:711:        encoding="utf-8"
+  train.py:712:    ) as f:
+  train.py:713:
+  train.py:714:        f.write(
+  train.py:715:            "\nPolicy: {}; Env: {}, seed: {}".format(
+  train.py:716:                args.policy,
+  train.py:717:                args.env,
+  train.py:718:                args.seed
+  train.py:719:            )
+  train.py:720:        )
+  train.py:721:
+  train.py:757:
+  train.py:758:        if not hasattr(
+  train.py:759:            src_replay_buffer,
+  train.py:760:            "convert_D4RL_hdf5"
+  train.py:761:        ):
+  train.py:762:
+  train.py:763:            raise RuntimeError(
+  train.py:764:                "convert_D4RL_hdf5 is missing from "
+> train.py:765:                "algo/utils.py. Update ReplayBuffer first."
+  train.py:766:            )
+  train.py:767:
+  train.py:768:        src_replay_buffer.convert_D4RL_hdf5(
+> train.py:769:            src_eval_env,
+  train.py:770:            chunk_size=8192
+  train.py:771:        )
+  train.py:772:
+  train.py:773:        if "antmaze" in args.env:
+  train.py:774:
+  train.py:775:            shift_rewards_in_chunks(
+  train.py:776:                src_replay_buffer,
+  train.py:777:                1.0
+  train.py:778:            )
+  train.py:779:
+  train.py:780:        print(
+  train.py:781:            "Source transitions:",
+  train.py:827:        )
+  train.py:828:
+  train.py:829:        print(
+  train.py:830:            "Target state shape:",
+  train.py:831:            tar_replay_buffer.state.shape
+  train.py:832:        )
+  train.py:833:
+  train.py:834:    # --------------------------------------------------------
+> train.py:835:    # INITIAL EVALUATION
+  train.py:836:    # --------------------------------------------------------
+  train.py:837:
+> train.py:838:    eval_cnt = 0
+  train.py:839:
+> train.py:840:    eval_src_return = eval_policy(
+  train.py:841:        policy,
+> train.py:842:        src_eval_env,
+> train.py:843:        eval_cnt=eval_cnt
+  train.py:844:    )
+  train.py:845:
+> train.py:846:    eval_tar_return = eval_policy(
+  train.py:847:        policy,
+> train.py:848:        tar_eval_env,
+> train.py:849:        eval_cnt=eval_cnt
+  train.py:850:    )
+  train.py:851:
+> train.py:852:    eval_cnt += 1
+  train.py:853:    # ========================================================
+  train.py:854:    # CONDITION A: TARGET-ONLY SAC
+  train.py:855:    # ========================================================
+  train.py:856:
+  train.py:857:    if (
+  train.py:858:        args.mode == 0
+  train.py:859:        and args.policy.lower() == "sac_target_only"
+  train.py:860:    ):
+  train.py:861:
+  train.py:862:        tar_state = tar_env.reset()
+  train.py:863:
+  train.py:864:        tar_done = False
+  train.py:919:                        "Episode T: {} Reward: {}".format(
+  train.py:920:                            t + 1,
+  train.py:921:                            tar_episode_num + 1,
+  train.py:922:                            tar_episode_timesteps,
+  train.py:923:                            tar_episode_reward
+  train.py:924:                        )
+  train.py:925:                    )
+  train.py:926:
+> train.py:927:                    writer.add_scalar(
+> train.py:928:                        "train/target return",
+  train.py:929:                        tar_episode_reward,
+  train.py:930:                        global_step=t + 1
+  train.py:931:                    )
+  train.py:932:
+> train.py:933:                    train_normalized_score = (
+  train.py:934:                        get_normalized_score(
+  train.py:935:                            tar_episode_reward,
+  train.py:936:                            ref_env_name
+  train.py:937:                        )
+  train.py:938:                    )
+  train.py:939:
+> train.py:940:                    writer.add_scalar(
+> train.py:941:                        "train/target normalized score",
+> train.py:942:                        train_normalized_score,
+  train.py:943:                        global_step=t + 1
+  train.py:944:                    )
+  train.py:945:
+  train.py:946:                    tar_state = tar_env.reset()
+  train.py:947:
+  train.py:948:                    tar_done = False
+  train.py:949:
+  train.py:950:                    tar_episode_reward = 0
+  train.py:951:
+  train.py:952:                    tar_episode_timesteps = 0
+  train.py:953:
+  train.py:954:                    tar_episode_num += 1
+  train.py:955:
+> train.py:956:            # Target-only training
+  train.py:957:
+> train.py:958:            policy.train(
+  train.py:959:                src_replay_buffer,
+  train.py:960:                tar_replay_buffer,
+  train.py:961:                config["batch_size"],
+> train.py:962:                writer
+  train.py:963:            )
+  train.py:964:
+> train.py:965:            # Evaluation
+  train.py:966:
+> train.py:967:            if (t + 1) % config["eval_freq"] == 0:
+  train.py:968:
+> train.py:969:                src_eval_return = eval_policy(
+  train.py:970:                    policy,
+> train.py:971:                    src_eval_env,
+> train.py:972:                    eval_cnt=eval_cnt
+  train.py:973:                )
+  train.py:974:
+> train.py:975:                tar_eval_return = eval_policy(
+  train.py:976:                    policy,
+> train.py:977:                    tar_eval_env,
+> train.py:978:                    eval_cnt=eval_cnt
+  train.py:979:                )
+  train.py:980:
+> train.py:981:                writer.add_scalar(
+  train.py:982:                    "test/source return",
+> train.py:983:                    src_eval_return,
+  train.py:984:                    global_step=t + 1
+  train.py:985:                )
+  train.py:986:
+> train.py:987:                writer.add_scalar(
+  train.py:988:                    "test/target return",
+> train.py:989:                    tar_eval_return,
+  train.py:990:                    global_step=t + 1
+  train.py:991:                )
+  train.py:992:
+> train.py:993:                eval_normalized_score = (
+  train.py:994:                    get_normalized_score(
+> train.py:995:                        tar_eval_return,
+  train.py:996:                        ref_env_name
+  train.py:997:                    )
+  train.py:998:                )
+  train.py:999:
+> train.py:1000:                writer.add_scalar(
+  train.py:1001:                    "test/target normalized score",
+> train.py:1002:                    eval_normalized_score,
+  train.py:1003:                    global_step=t + 1
+  train.py:1004:                )
+  train.py:1005:
+> train.py:1006:                eval_cnt += 1
+  train.py:1007:
+> train.py:1008:                if args.save_model:
+  train.py:1009:
+> train.py:1010:                    policy.save(
+  train.py:1011:                        "{}/models/model".format(outdir)
+  train.py:1012:                    )
+  train.py:1013:
+  train.py:1014:    # ========================================================
+  train.py:1015:    # MODE 0: ONLINE SOURCE + ONLINE TARGET
+  train.py:1016:    # ========================================================
+  train.py:1017:
+  train.py:1018:    elif args.mode == 0:
+  train.py:1019:
+  train.py:1020:        src_state = src_env.reset()
+  train.py:1021:
+  train.py:1022:        tar_state = tar_env.reset()
+  train.py:1124:                    tar_reward,
+  train.py:1125:                    tar_done_bool
+  train.py:1126:                )
+  train.py:1127:
+  train.py:1128:                tar_state = tar_next_state
+  train.py:1129:
+  train.py:1130:                tar_episode_reward += tar_reward
+  train.py:1131:
+> train.py:1132:            # Training
+  train.py:1133:
+> train.py:1134:            policy.train(
+  train.py:1135:                src_replay_buffer,
+  train.py:1136:                tar_replay_buffer,
+  train.py:1137:                config["batch_size"],
+> train.py:1138:                writer
+  train.py:1139:            )
+  train.py:1140:
+  train.py:1141:            # Source episode completion
+  train.py:1142:
+  train.py:1143:            if src_done:
+  train.py:1144:
+  train.py:1145:                print(
+  train.py:1146:                    "Total T: {} Episode Num: {} "
+  train.py:1147:                    "Episode T: {} Reward: {}".format(
+  train.py:1148:                        t + 1,
+  train.py:1149:                        src_episode_num + 1,
+  train.py:1150:                        src_episode_timesteps,
+  train.py:1151:                        src_episode_reward
+  train.py:1152:                    )
+  train.py:1153:                )
+  train.py:1154:
+> train.py:1155:                writer.add_scalar(
+> train.py:1156:                    "train/source return",
+  train.py:1157:                    src_episode_reward,
+  train.py:1158:                    global_step=t + 1
+  train.py:1159:                )
+  train.py:1160:
+  train.py:1161:                src_state = src_env.reset()
+  train.py:1162:
+  train.py:1163:                src_done = False
+  train.py:1164:
+  train.py:1165:                src_episode_reward = 0
+  train.py:1166:
+  train.py:1167:                src_episode_timesteps = 0
+  train.py:1168:
+  train.py:1177:                    "Episode T: {} Reward: {}".format(
+  train.py:1178:                        t + 1,
+  train.py:1179:                        tar_episode_num + 1,
+  train.py:1180:                        tar_episode_timesteps,
+  train.py:1181:                        tar_episode_reward
+  train.py:1182:                    )
+  train.py:1183:                )
+  train.py:1184:
+> train.py:1185:                writer.add_scalar(
+> train.py:1186:                    "train/target return",
+  train.py:1187:                    tar_episode_reward,
+  train.py:1188:                    global_step=t + 1
+  train.py:1189:                )
+  train.py:1190:
+> train.py:1191:                train_normalized_score = (
+  train.py:1192:                    get_normalized_score(
+  train.py:1193:                        tar_episode_reward,
+  train.py:1194:                        ref_env_name
+  train.py:1195:                    )
+  train.py:1196:                )
+  train.py:1197:
+> train.py:1198:                writer.add_scalar(
+> train.py:1199:                    "train/target normalized score",
+> train.py:1200:                    train_normalized_score,
+  train.py:1201:                    global_step=t + 1
+  train.py:1202:                )
+  train.py:1203:
+  train.py:1204:                tar_state = tar_env.reset()
+  train.py:1205:
+  train.py:1206:                tar_done = False
+  train.py:1207:
+  train.py:1208:                tar_episode_reward = 0
+  train.py:1209:
+  train.py:1210:                tar_episode_timesteps = 0
+  train.py:1211:
+  train.py:1212:                tar_episode_num += 1
+  train.py:1213:
+> train.py:1214:            # Evaluation
+  train.py:1215:
+> train.py:1216:            if (t + 1) % config["eval_freq"] == 0:
+  train.py:1217:
+> train.py:1218:                src_eval_return = eval_policy(
+  train.py:1219:                    policy,
+> train.py:1220:                    src_eval_env,
+> train.py:1221:                    eval_cnt=eval_cnt
+  train.py:1222:                )
+  train.py:1223:
+> train.py:1224:                tar_eval_return = eval_policy(
+  train.py:1225:                    policy,
+> train.py:1226:                    tar_eval_env,
+> train.py:1227:                    eval_cnt=eval_cnt
+  train.py:1228:                )
+  train.py:1229:
+> train.py:1230:                writer.add_scalar(
+  train.py:1231:                    "test/source return",
+> train.py:1232:                    src_eval_return,
+  train.py:1233:                    global_step=t + 1
+  train.py:1234:                )
+  train.py:1235:
+> train.py:1236:                writer.add_scalar(
+  train.py:1237:                    "test/target return",
+> train.py:1238:                    tar_eval_return,
+  train.py:1239:                    global_step=t + 1
+  train.py:1240:                )
+  train.py:1241:
+> train.py:1242:                eval_normalized_score = (
+  train.py:1243:                    get_normalized_score(
+> train.py:1244:                        tar_eval_return,
+  train.py:1245:                        ref_env_name
+  train.py:1246:                    )
+  train.py:1247:                )
+  train.py:1248:
+> train.py:1249:                writer.add_scalar(
+  train.py:1250:                    "test/target normalized score",
+> train.py:1251:                    eval_normalized_score,
+  train.py:1252:                    global_step=t + 1
+  train.py:1253:                )
+  train.py:1254:
+> train.py:1255:                eval_cnt += 1
+  train.py:1256:
+> train.py:1257:                if args.save_model:
+  train.py:1258:
+> train.py:1259:                    policy.save(
+  train.py:1260:                        "{}/models/model".format(outdir)
+  train.py:1261:                    )
+  train.py:1262:
+  train.py:1263:    # ========================================================
+  train.py:1264:    # MODE 1: OFFLINE SOURCE + ONLINE TARGET
+  train.py:1265:    # ========================================================
+  train.py:1266:
+  train.py:1267:    elif args.mode == 1:
+  train.py:1268:
+  train.py:1269:        tar_state = tar_env.reset()
+  train.py:1270:
+  train.py:1271:        tar_done = False
+  train.py:1314:                    tar_reward,
+  train.py:1315:                    tar_done_bool
+  train.py:1316:                )
+  train.py:1317:
+  train.py:1318:                tar_state = tar_next_state
+  train.py:1319:
+  train.py:1320:                tar_episode_reward += tar_reward
+  train.py:1321:
+> train.py:1322:            # Offline-to-online training
+  train.py:1323:
+> train.py:1324:            policy.train(
+  train.py:1325:                src_replay_buffer,
+  train.py:1326:                tar_replay_buffer,
+  train.py:1327:                config["batch_size"],
+> train.py:1328:                writer
+  train.py:1329:            )
+  train.py:1330:
+  train.py:1331:            # Target episode completion
+  train.py:1332:
+  train.py:1333:            if tar_done:
+  train.py:1334:
+  train.py:1335:                print(
+  train.py:1336:                    "Total T: {} Episode Num: {} "
+  train.py:1337:                    "Episode T: {} Reward: {}".format(
+  train.py:1338:                        t + 1,
+  train.py:1339:                        tar_episode_num + 1,
+  train.py:1340:                        tar_episode_timesteps,
+  train.py:1341:                        tar_episode_reward
+  train.py:1342:                    )
+  train.py:1343:                )
+  train.py:1344:
+> train.py:1345:                writer.add_scalar(
+> train.py:1346:                    "train/target return",
+  train.py:1347:                    tar_episode_reward,
+  train.py:1348:                    global_step=t + 1
+  train.py:1349:                )
+  train.py:1350:
+> train.py:1351:                train_normalized_score = (
+  train.py:1352:                    get_normalized_score(
+  train.py:1353:                        tar_episode_reward,
+  train.py:1354:                        ref_env_name
+  train.py:1355:                    )
+  train.py:1356:                )
+  train.py:1357:
+> train.py:1358:                writer.add_scalar(
+> train.py:1359:                    "train/target normalized score",
+> train.py:1360:                    train_normalized_score,
+  train.py:1361:                    global_step=t + 1
+  train.py:1362:                )
+  train.py:1363:
+  train.py:1364:                tar_state = tar_env.reset()
+  train.py:1365:
+  train.py:1366:                tar_done = False
+  train.py:1367:
+  train.py:1368:                tar_episode_reward = 0
+  train.py:1369:
+  train.py:1370:                tar_episode_timesteps = 0
+  train.py:1371:
+  train.py:1372:                tar_episode_num += 1
+  train.py:1373:
+> train.py:1374:            # Evaluation
+  train.py:1375:
+> train.py:1376:            if (t + 1) % config["eval_freq"] == 0:
+  train.py:1377:
+> train.py:1378:                src_eval_return = eval_policy(
+  train.py:1379:                    policy,
+> train.py:1380:                    src_eval_env,
+> train.py:1381:                    eval_cnt=eval_cnt
+  train.py:1382:                )
+  train.py:1383:
+> train.py:1384:                tar_eval_return = eval_policy(
+  train.py:1385:                    policy,
+> train.py:1386:                    tar_eval_env,
+> train.py:1387:                    eval_cnt=eval_cnt
+  train.py:1388:                )
+  train.py:1389:
+> train.py:1390:                writer.add_scalar(
+  train.py:1391:                    "test/source return",
+> train.py:1392:                    src_eval_return,
+  train.py:1393:                    global_step=t + 1
+  train.py:1394:                )
+  train.py:1395:
+> train.py:1396:                writer.add_scalar(
+  train.py:1397:                    "test/target return",
+> train.py:1398:                    tar_eval_return,
+  train.py:1399:                    global_step=t + 1
+  train.py:1400:                )
+  train.py:1401:
+> train.py:1402:                eval_normalized_score = (
+  train.py:1403:                    get_normalized_score(
+> train.py:1404:                        tar_eval_return,
+  train.py:1405:                        ref_env_name
+  train.py:1406:                    )
+  train.py:1407:                )
+  train.py:1408:
+> train.py:1409:                writer.add_scalar(
+  train.py:1410:                    "test/target normalized score",
+> train.py:1411:                    eval_normalized_score,
+  train.py:1412:                    global_step=t + 1
+  train.py:1413:                )
+  train.py:1414:
+> train.py:1415:                eval_cnt += 1
+  train.py:1416:
+> train.py:1417:                if args.save_model:
+  train.py:1418:
+> train.py:1419:                    policy.save(
+  train.py:1420:                        "{}/models/model".format(outdir)
+  train.py:1421:                    )
+  train.py:1422:
+  train.py:1423:    # ========================================================
+  train.py:1424:    # MODE 2: ONLINE SOURCE + OFFLINE TARGET
+  train.py:1425:    # ========================================================
+  train.py:1426:
+  train.py:1427:    elif args.mode == 2:
+  train.py:1428:
+  train.py:1429:        src_state = src_env.reset()
+  train.py:1430:
+  train.py:1431:        src_done = False
+  train.py:1482:                src_reward,
+  train.py:1483:                src_done_bool
+  train.py:1484:            )
+  train.py:1485:
+  train.py:1486:            src_state = src_next_state
+  train.py:1487:
+  train.py:1488:            src_episode_reward += src_reward
+  train.py:1489:
+> train.py:1490:            # Training
+  train.py:1491:
+> train.py:1492:            policy.train(
+  train.py:1493:                src_replay_buffer,
+  train.py:1494:                tar_replay_buffer,
+  train.py:1495:                config["batch_size"],
+> train.py:1496:                writer
+  train.py:1497:            )
+  train.py:1498:
+  train.py:1499:            # Source episode completion
+  train.py:1500:
+  train.py:1501:            if src_done:
+  train.py:1502:
+  train.py:1503:                print(
+  train.py:1504:                    "Total T: {} Episode Num: {} "
+  train.py:1505:                    "Episode T: {} Reward: {}".format(
+  train.py:1506:                        t + 1,
+  train.py:1507:                        src_episode_num + 1,
+  train.py:1508:                        src_episode_timesteps,
+  train.py:1509:                        src_episode_reward
+  train.py:1510:                    )
+  train.py:1511:                )
+  train.py:1512:
+> train.py:1513:                writer.add_scalar(
+> train.py:1514:                    "train/source return",
+  train.py:1515:                    src_episode_reward,
+  train.py:1516:                    global_step=t + 1
+  train.py:1517:                )
+  train.py:1518:
+  train.py:1519:                src_state = src_env.reset()
+  train.py:1520:
+  train.py:1521:                src_done = False
+  train.py:1522:
+  train.py:1523:                src_episode_reward = 0
+  train.py:1524:
+  train.py:1525:                src_episode_timesteps = 0
+  train.py:1526:
+  train.py:1527:                src_episode_num += 1
+  train.py:1528:
+> train.py:1529:            # Evaluation
+  train.py:1530:
+> train.py:1531:            if (t + 1) % config["eval_freq"] == 0:
+  train.py:1532:
+> train.py:1533:                src_eval_return = eval_policy(
+  train.py:1534:                    policy,
+> train.py:1535:                    src_eval_env,
+> train.py:1536:                    eval_cnt=eval_cnt
+  train.py:1537:                )
+  train.py:1538:
+> train.py:1539:                tar_eval_return = eval_policy(
+  train.py:1540:                    policy,
+> train.py:1541:                    tar_eval_env,
+> train.py:1542:                    eval_cnt=eval_cnt
+  train.py:1543:                )
+  train.py:1544:
+> train.py:1545:                writer.add_scalar(
+  train.py:1546:                    "test/source return",
+> train.py:1547:                    src_eval_return,
+  train.py:1548:                    global_step=t + 1
+  train.py:1549:                )
+  train.py:1550:
+> train.py:1551:                writer.add_scalar(
+  train.py:1552:                    "test/target return",
+> train.py:1553:                    tar_eval_return,
+  train.py:1554:                    global_step=t + 1
+  train.py:1555:                )
+  train.py:1556:
+> train.py:1557:                eval_normalized_score = (
+  train.py:1558:                    get_normalized_score(
+> train.py:1559:                        tar_eval_return,
+  train.py:1560:                        ref_env_name
+  train.py:1561:                    )
+  train.py:1562:                )
+  train.py:1563:
+> train.py:1564:                writer.add_scalar(
+  train.py:1565:                    "test/target normalized score",
+> train.py:1566:                    eval_normalized_score,
+  train.py:1567:                    global_step=t + 1
+  train.py:1568:                )
+  train.py:1569:
+> train.py:1570:                eval_cnt += 1
+  train.py:1571:
+> train.py:1572:                if args.save_model:
+  train.py:1573:
+> train.py:1574:                    policy.save(
+  train.py:1575:                        "{}/models/model".format(outdir)
+  train.py:1576:                    )
+  train.py:1577:
+  train.py:1578:    # ========================================================
+  train.py:1579:    # MODE 3: OFFLINE SOURCE + OFFLINE TARGET
+  train.py:1580:    # ========================================================
+  train.py:1581:
+  train.py:1582:    else:
+  train.py:1583:
+  train.py:1584:        for t in range(int(config["max_step"])):
+  train.py:1585:
+> train.py:1586:            policy.train(
+  train.py:1587:                src_replay_buffer,
+  train.py:1588:                tar_replay_buffer,
+  train.py:1589:                config["batch_size"],
+> train.py:1590:                writer
+  train.py:1591:            )
+  train.py:1592:
+> train.py:1593:            # Evaluation
+  train.py:1594:
+> train.py:1595:            if (t + 1) % config["eval_freq"] == 0:
+  train.py:1596:
+> train.py:1597:                src_eval_return = eval_policy(
+  train.py:1598:                    policy,
+> train.py:1599:                    src_eval_env,
+> train.py:1600:                    eval_cnt=eval_cnt
+  train.py:1601:                )
+  train.py:1602:
+> train.py:1603:                tar_eval_return = eval_policy(
+  train.py:1604:                    policy,
+> train.py:1605:                    tar_eval_env,
+> train.py:1606:                    eval_cnt=eval_cnt
+  train.py:1607:                )
+  train.py:1608:
+> train.py:1609:                writer.add_scalar(
+  train.py:1610:                    "test/source return",
+> train.py:1611:                    src_eval_return,
+  train.py:1612:                    global_step=t + 1
+  train.py:1613:                )
+  train.py:1614:
+> train.py:1615:                writer.add_scalar(
+  train.py:1616:                    "test/target return",
+> train.py:1617:                    tar_eval_return,
+  train.py:1618:                    global_step=t + 1
+  train.py:1619:                )
+  train.py:1620:
+> train.py:1621:                eval_normalized_score = (
+  train.py:1622:                    get_normalized_score(
+> train.py:1623:                        tar_eval_return,
+  train.py:1624:                        ref_env_name
+  train.py:1625:                    )
+  train.py:1626:                )
+  train.py:1627:
+> train.py:1628:                writer.add_scalar(
+  train.py:1629:                    "test/target normalized score",
+> train.py:1630:                    eval_normalized_score,
+  train.py:1631:                    global_step=t + 1
+  train.py:1632:                )
+  train.py:1633:
+> train.py:1634:                eval_cnt += 1
+  train.py:1635:
+> train.py:1636:                if args.save_model:
+  train.py:1637:
+> train.py:1638:                    policy.save(
+  train.py:1639:                        "{}/models/model".format(outdir)
+  train.py:1640:                    )
+  train.py:1641:
+  train.py:1642:    # ========================================================
+> train.py:1643:    # CLOSE LOGGING
+  train.py:1644:    # ========================================================
+  train.py:1645:
+> train.py:1646:    writer.close()
+  train.py:1647:
+  train.py:1648:    print("\n========================================")
+  train.py:1649:
+> train.py:1650:    print("TRAINING COMPLETED")
+  train.py:1651:
+  train.py:1652:    print("Policy:", args.policy)
+  train.py:1653:
+  train.py:1654:    print("Environment:", args.env)
+  train.py:1655:
+  train.py:1656:    print("Shift:", args.shift_level)
+  train.py:1657:
+  train.py:1658:    print("Seed:", args.seed)
+  train.py:1659:
+  train.py:1660:    print("Output directory:", outdir)
+  train.py:1661:
+  train.py:1662:    print("========================================")
+
+
+
+
+========== EXPERIMENT DIRECTORIES ==========
+
+FullName                                                                                
+--------                                                                                
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_ablation_nogate                         
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_ablation_strong                         
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_ablation_unnormalized                   
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_normalized_pilot                        
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_phase17_phase19_tensorboard_audit       
+C:\Users\LANGS\Documents\off-dynamics-rl\ea_ntc_quantitative_results                    
+C:\Users\LANGS\Documents\off-dynamics-rl\experiments_10k_576                            
+C:\Users\LANGS\Documents\off-dynamics-rl\experiments_ea_ntc_10k_96                      
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_norm_vs_mean_4env_6shift_6seed_5000
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase11_diagnostics                
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase12_mismatch_only              
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase12_relative                   
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase14_tau_2                      
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase14_tau_4                      
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase15_friction_01                
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16d                           
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16d_retry1                    
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16d_smoketest                 
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16d_smoketest_jsonfix         
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16d_smoketest_mode1           
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16e                           
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase16e_smoketest_lambda050       
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase17a_adaptive                  
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase17b_normalized                
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase17b_normalized_smoke          
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase17c_confirmation              
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_phase17_adaptive_smoketest         
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_pilot                              
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_validation_mismatch_only           
+C:\Users\LANGS\Documents\off-dynamics-rl\logs_ea_ntc_validation_mismatch_uncertainty    
+
+
+
+
+========== EA-NTC RUN CONFIGURATIONS ==========
+
+========== INSPECTION COMPLETE ==========

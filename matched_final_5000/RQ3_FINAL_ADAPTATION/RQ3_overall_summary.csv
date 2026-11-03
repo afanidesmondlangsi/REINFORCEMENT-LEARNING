@@ -1,0 +1,4 @@
+Comparison,Mean_AUC_difference,Normalized_wins,Mean_wins,Ties
+Normalized vs Mean,19663.721750179928,18,27,3
+Normalized vs SAC,856733.0212565139,42,6,0
+Mean vs SAC,837069.299506334,44,4,0

@@ -1,0 +1,479 @@
+algorithm,environment,shift,seed,event_file,checkpoints,max_step,complete_10k
+EA-NTC OTHER,hopper,0.5,0,ea_ntc_ablation_nogate\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793358683.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,hopper,0.5,0,ea_ntc_ablation_strong\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793358564.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,hopper,0.5,0,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793359015.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,hopper,0.5,1,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793359589.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,hopper,0.5,2,ea_ntc_ablation_unnormalized\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793359674.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.5,0,ea_ntc_normalized_pilot\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793358186.LAPTOP-UQB2MEFQ,5,5000,False
+BC-PAR,ant,0.1,0,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793461573.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,0.1,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793462224.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,0.1,2,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793462797.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,0.5,0,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793465049.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,0.5,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793465626.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,0.5,2,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793466155.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,2.0,0,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793468877.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,2.0,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793469269.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,2.0,2,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793469743.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,5.0,0,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793471844.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,5.0,1,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793472321.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,ant,5.0,2,experiments_10k_576\results\BC_PAR\bc_par\ant-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793472808.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.1,0,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793447912.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.1,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793448203.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.1,2,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793448490.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.5,0,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793449673.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.5,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793449981.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,0.5,2,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793450280.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,2.0,0,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793451507.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,2.0,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793451818.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,2.0,2,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793452130.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,5.0,0,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793453392.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,5.0,1,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793453719.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,halfcheetah,5.0,2,experiments_10k_576\results\BC_PAR\bc_par\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793454056.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.1,0,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793443592.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.1,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793443946.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.1,2,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793444113.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.5,0,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793444850.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.5,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793445024.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,0.5,2,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793445184.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,2.0,0,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793445838.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,2.0,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793446004.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,2.0,2,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793446175.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,5.0,0,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793446852.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,5.0,1,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793447028.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,hopper,5.0,2,experiments_10k_576\results\BC_PAR\bc_par\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793447205.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.1,0,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793455396.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.1,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793455650.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.1,2,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793455919.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.5,0,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793456880.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.5,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793457128.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,0.5,2,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793457378.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,2.0,0,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793458376.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,2.0,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793458632.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,2.0,2,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793458885.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,5.0,0,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793459873.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,5.0,1,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793460143.LAPTOP-UQB2MEFQ,10,10000,True
+BC-PAR,walker2d,5.0,2,experiments_10k_576\results\BC_PAR\bc_par\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793460438.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.1,0,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793498557.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.1,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793499264.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.1,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793499883.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.5,0,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793508062.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.5,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793508597.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,0.5,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793509036.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,2.0,0,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793510739.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,2.0,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793511105.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,2.0,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793511526.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,5.0,0,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793513462.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,5.0,1,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793513906.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,ant,5.0,2,experiments_10k_576\results\BC_SAC\bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793514411.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.1,0,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793481485.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.1,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793481881.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.1,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793482274.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.5,0,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793483866.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.5,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793484269.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.5,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793484674.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,2.0,0,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793486337.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,2.0,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793486765.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,2.0,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793487157.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,5.0,0,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793488696.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,5.0,1,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793489097.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,5.0,2,experiments_10k_576\results\BC_SAC\bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793489497.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.1,0,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793475292.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.1,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793475590.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.1,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793475814.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.5,0,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793476750.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.5,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793477004.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,0.5,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793477266.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,2.0,0,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793478299.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,2.0,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793478564.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,2.0,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793478824.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,5.0,0,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793479880.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,5.0,1,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793480142.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,hopper,5.0,2,experiments_10k_576\results\BC_SAC\bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793480407.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.1,0,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793491156.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.1,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793491455.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.1,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793491764.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.5,0,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793492922.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.5,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793493215.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,0.5,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793493518.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,2.0,0,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793494710.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,2.0,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793495007.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,2.0,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793495306.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,5.0,0,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793496550.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,5.0,1,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793496867.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,walker2d,5.0,2,experiments_10k_576\results\BC_SAC\bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793497172.LAPTOP-UQB2MEFQ,10,10000,True
+RLPD,ant,0.1,0,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793523552.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,0.1,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793524258.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,0.1,2,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793524942.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,5.0,0,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793530168.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,5.0,1,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793530833.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,5.0,2,experiments_10k_576\results\RLPD\rlpd\ant-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793531506.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.1,0,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793520441.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.1,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793520907.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.1,2,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793521337.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,5.0,0,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793527105.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,5.0,1,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793527526.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,5.0,2,experiments_10k_576\results\RLPD\rlpd\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793527954.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,5.0,0,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793525795.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,5.0,1,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793526120.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,5.0,2,experiments_10k_576\results\RLPD\rlpd\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793526448.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.1,0,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793521972.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.1,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793522319.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.1,2,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793522672.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,5.0,0,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793528593.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,5.0,1,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793528962.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,5.0,2,experiments_10k_576\results\RLPD\rlpd\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793529354.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.1,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r0\tb\events.out.tfevents.1793523030.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.1,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r1\tb\events.out.tfevents.1793523207.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.1,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-0.1\r2\tb\events.out.tfevents.1793523382.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,5.0,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r0\tb\events.out.tfevents.1793529727.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,5.0,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r1\tb\events.out.tfevents.1793529875.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,5.0,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\ant-friction-5.0\r2\tb\events.out.tfevents.1793530023.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.1,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r0\tb\events.out.tfevents.1793520097.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.1,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r1\tb\events.out.tfevents.1793520218.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.1,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-0.1\r2\tb\events.out.tfevents.1793520335.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,5.0,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r0\tb\events.out.tfevents.1793526766.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,5.0,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r1\tb\events.out.tfevents.1793526878.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,5.0,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\halfcheetah-friction-5.0\r2\tb\events.out.tfevents.1793526991.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,5.0,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r0\tb\events.out.tfevents.1793525608.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,5.0,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r1\tb\events.out.tfevents.1793525673.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,5.0,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\hopper-friction-5.0\r2\tb\events.out.tfevents.1793525733.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.1,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r0\tb\events.out.tfevents.1793521760.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.1,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r1\tb\events.out.tfevents.1793521825.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.1,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-0.1\r2\tb\events.out.tfevents.1793521903.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,5.0,0,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r0\tb\events.out.tfevents.1793528368.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,5.0,1,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r1\tb\events.out.tfevents.1793528438.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,5.0,2,experiments_10k_576\results\SAC_TARGET_ONLY\sac_target_only\walker2d-friction-5.0\r2\tb\events.out.tfevents.1793528516.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,ant,0.1,0,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.1_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793616961.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,0.1,1,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.1_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793618017.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,0.1,2,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.1_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793619064.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,0.5,0,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.5_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793620137.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,0.5,1,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.5_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793621124.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,0.5,2,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_0.5_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793621687.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,2.0,0,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_2.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793622205.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,2.0,1,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_2.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793622714.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,2.0,2,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_2.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793623239.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,5.0,0,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_5.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793624328.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,5.0,1,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_5.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793624737.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,ant,5.0,2,experiments_ea_ntc_10k_96\NORMALIZED_ant_shift_5.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793625300.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.1,0,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793607455.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.1,1,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793607855.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.1,2,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793608253.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.5,0,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793608652.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.5,1,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793609064.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,0.5,2,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793609466.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,2.0,0,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_2.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793609880.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,2.0,1,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_2.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793610308.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,2.0,2,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_2.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793610747.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,5.0,0,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_5.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793611170.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,5.0,1,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_5.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793611635.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,halfcheetah,5.0,2,experiments_ea_ntc_10k_96\NORMALIZED_halfcheetah_shift_5.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793612065.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,0,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793604348.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,1,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793604664.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,2,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793604922.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,0,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793605170.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,1,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793605417.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,2,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793605658.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,0,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793605902.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,1,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793606159.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,2,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793606428.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,0,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793606688.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,1,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793606941.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,2,experiments_ea_ntc_10k_96\NORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793607192.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.1,0,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793612535.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.1,1,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793612877.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.1,2,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793613242.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.5,0,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793613603.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.5,1,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793613965.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.5,2,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793614369.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,2.0,0,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793614732.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,2.0,1,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793615088.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,2.0,2,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793615469.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,5.0,0,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793615830.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,5.0,1,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793616220.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,5.0,2,experiments_ea_ntc_10k_96\NORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793616588.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.1,0,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.1_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793634886.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.1,1,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.1_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793635388.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.1,2,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.1_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793635847.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.5,0,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.5_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793636348.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.5,1,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.5_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793636802.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,0.5,2,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_0.5_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793637263.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,2.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_2.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793637718.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,2.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_2.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793638148.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,2.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_2.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793638600.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,5.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_5.0_seed_0\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793639017.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,5.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_5.0_seed_1\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793639457.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,ant,5.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_ant_shift_5.0_seed_2\ea_ntc_bc_sac\ant-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793639853.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.1,0,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793628139.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.1,1,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793628466.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.1,2,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793628799.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.5,0,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793629124.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.5,1,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793629455.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,0.5,2,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793629779.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,2.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_2.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793630102.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,2.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_2.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793630429.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,2.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_2.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793630747.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,5.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_5.0_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793631069.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,5.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_5.0_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793631390.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,halfcheetah,5.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_halfcheetah_shift_5.0_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793631705.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,0,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793625778.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,1,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793625968.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,2,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793626159.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,0,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793626354.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,1,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793626544.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,2,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793626740.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793626933.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793627131.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793627333.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793627537.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793627737.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793627935.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.1,0,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793632021.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.1,1,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793632256.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.1,2,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793632508.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.5,0,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793632746.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.5,1,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793632984.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,0.5,2,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793633236.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,2.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793633478.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,2.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793633714.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,2.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793633955.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,5.0,0,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793634194.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,5.0,1,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793634425.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,walker2d,5.0,2,experiments_ea_ntc_10k_96\UNNORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793634657.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,0,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793650935.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,1,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793651119.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.1,2,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793651295.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,0,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793651468.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,1,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793651644.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,0.5,2,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793651825.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,0,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793652006.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,1,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793652191.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,2.0,2,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793652381.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,0,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793652569.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,1,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793652755.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,hopper,5.0,2,experiments_ea_ntc_10k_corrected_hopper_24\NORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793652954.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,0,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793653217.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,1,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793653427.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.1,2,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793653626.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,0,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793653827.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,1,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793654038.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,0.5,2,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793654227.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,0,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793654411.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,1,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793654597.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,2.0,2,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793654781.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,0,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793654964.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,1,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793655147.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC UNNORMALIZED,hopper,5.0,2,experiments_ea_ntc_10k_corrected_hopper_24\UNNORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793655325.LAPTOP-UQB2MEFQ,10,10000,True
+BC-SAC,halfcheetah,0.5,0,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793307694.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,1,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793307805.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,2,logs_bc_sac_phase13_baseline\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793307919.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase11_diagnostics\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793305157.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase12_mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793306202.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase12_relative\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793305634.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase14_tau_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793334194.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase14_tau_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793334327.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase14_tau_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793334462.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase14_tau_4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793334599.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase14_tau_4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793334731.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase14_tau_4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793334860.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase15_friction_01\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793335319.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase15_friction_01\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793335437.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase15_friction_01\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793335552.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase15_friction_01\mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793335667.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase15_friction_01\mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793335787.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase15_friction_01\mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793335919.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase15_friction_01\uncertainty_tau4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793336051.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase15_friction_01\uncertainty_tau4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793336184.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase15_friction_01\uncertainty_tau4\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793336318.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793338705.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793339092.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793339472.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793339856.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793340255.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase16d_retry1\bc_sac\bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793340644.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793338962.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793339341.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793339724.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793340121.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793340512.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase16d_retry1\learned_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793340896.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793338834.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793339216.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793339598.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793339990.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793340383.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase16d_retry1\unit_weights\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793340768.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16d_smoketest_jsonfix\bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793338371.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16e\lambda_0p25_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793342139.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase16e\lambda_0p25_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793342273.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase16e\lambda_0p25_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793342405.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase16e\lambda_0p25_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793342537.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase16e\lambda_0p25_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793342668.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase16e\lambda_0p25_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793342797.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16e\lambda_0p50_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793342920.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase16e\lambda_0p50_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793343043.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase16e\lambda_0p50_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793343167.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase16e\lambda_0p50_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793343289.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase16e\lambda_0p50_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793343419.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase16e\lambda_0p50_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793343543.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase16e_smoketest_lambda050\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793341840.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,0,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793344496.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,1,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793344620.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.1,2,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793344742.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793344868.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793344999.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_phase17a_adaptive\adaptive_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793345130.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.1,0,logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793345929.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.1,1,logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793346050.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.1,2,logs_ea_ntc_phase17b_normalized\normalized_shift_0.1_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793346174.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.5,0,logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_0\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793346297.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.5,1,logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_1\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793346419.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.5,2,logs_ea_ntc_phase17b_normalized\normalized_shift_0.5_seed_2\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793346542.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,halfcheetah,0.1,1,logs_ea_ntc_phase17b_normalized_smoke\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793345687.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_phase17_adaptive_smoketest\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793344178.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_ea_ntc_pilot\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793304495.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_validation_mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793306773.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_validation_mismatch_only\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793306891.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,1,logs_ea_ntc_validation_mismatch_uncertainty\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793307012.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,2,logs_ea_ntc_validation_mismatch_uncertainty\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793307134.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.1,0,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793431939.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.1,1,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793432027.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.1,2,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793432113.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.5,0,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793432470.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.5,1,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793432557.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.5,2,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793432641.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,2.0,0,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793432989.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,2.0,1,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793433079.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,2.0,2,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793433173.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,5.0,0,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793433593.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,5.0,1,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793433685.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,5.0,2,logs_hopper_corrected_gate_48runs\NORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793433775.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.1,0,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793434140.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.1,1,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793434226.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.1,2,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.1_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793434312.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.5,0,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793434657.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.5,1,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793434740.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.5,2,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_0.5_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793434828.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,2.0,0,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793435172.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,2.0,1,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793435263.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,2.0,2,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_2.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793435350.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,5.0,0,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793435702.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,5.0,1,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_1\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793435789.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,5.0,2,logs_hopper_corrected_gate_48runs\UNNORMALIZED_hopper_shift_5.0_seed_2\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793435876.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,hopper,0.1,0,logs_hopper_corrected_pilot\NORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793431606.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,hopper,0.1,0,logs_hopper_corrected_pilot\UNNORMALIZED_hopper_shift_0.1_seed_0\ea_ntc_bc_sac\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793431690.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_phase19\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793355010.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC OTHER,halfcheetah,0.5,0,logs_phase19_10k\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793355508.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC OTHER,halfcheetah,0.5,0,logs_phase19_10k_kappa05\ea_ntc_bc_sac\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793355935.LAPTOP-UQB2MEFQ,10,10000,True
+EA-NTC NORMALIZED,walker2d,0.5,0,logs_walker2d_gate_sensitivity_090\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793421991.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.5,0,logs_walker2d_gate_sensitivity_090\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793422081.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.5,0,logs_walker2d_gate_sensitivity_090_095\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793425167.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.5,0,logs_walker2d_gate_sensitivity_090_095\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793425256.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.1,0,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793425516.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.1,1,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793425601.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.1,2,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793425689.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.5,0,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793426038.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.5,1,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793426146.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,0.5,2,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793426244.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,2.0,0,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793426655.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,2.0,1,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793426751.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,2.0,2,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793426849.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,5.0,0,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793427232.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,5.0,1,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793427327.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC NORMALIZED,walker2d,5.0,2,logs_walker2d_revised_gate_48runs\NORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793427423.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.1,0,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1793427807.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.1,1,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1793427904.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.1,2,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.1_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1793428000.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.5,0,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1793428385.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.5,1,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1793428495.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,0.5,2,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_0.5_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1793428598.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,2.0,0,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1793429011.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,2.0,1,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1793429124.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,2.0,2,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_2.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1793429226.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,5.0,0,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_0\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r0\tb\events.out.tfevents.1793429614.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,5.0,1,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_1\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r1\tb\events.out.tfevents.1793429710.LAPTOP-UQB2MEFQ,5,5000,False
+EA-NTC UNNORMALIZED,walker2d,5.0,2,logs_walker2d_revised_gate_48runs\UNNORMALIZED_walker2d_shift_5.0_seed_2\ea_ntc_bc_sac\walker2d-friction-srcdatatype-medium-5.0\r2\tb\events.out.tfevents.1793429809.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.1,1,rq1_bc_sac\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1790569879.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.1,2,rq1_bc_sac\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1790569984.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.1,1,rq1_rlpd\RLPD\hopper-friction-srcdatatype-medium-0.1\r1\tb\events.out.tfevents.1790570155.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.1,2,rq1_rlpd\RLPD\hopper-friction-srcdatatype-medium-0.1\r2\tb\events.out.tfevents.1790570540.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.1,0,rq1_rlpd_test\RLPD\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1790566296.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.1,0,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r0\tb\events.out.tfevents.1790569173.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.1,1,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r1\tb\events.out.tfevents.1790569528.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.1,2,rq1_target_only\SAC_TARGET_ONLY\hopper-friction-0.1\r2\tb\events.out.tfevents.1790569707.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.1,0,rq1_test\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1790565541.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,0.5,0,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790916479.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,0.5,1,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790916666.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,0.5,2,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790916865.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,2.0,0,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790917059.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,2.0,1,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790917241.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,ant,2.0,2,rq2_generalization\BC_SAC\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790917430.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,0,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790830371.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,1,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790831479.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,2,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790828766.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,0.5,2,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790831619.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,2.0,0,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790831758.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,2.0,1,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790831893.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,halfcheetah,2.0,2,rq2_generalization\BC_SAC\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790832030.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.5,0,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790820320.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.5,1,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790821554.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.5,2,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790823741.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,2.0,0,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790824205.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,2.0,1,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790824308.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,2.0,2,rq2_generalization\BC_SAC\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790824414.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,0.5,0,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790911958.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,0.5,1,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790912061.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,0.5,2,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790912158.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,2.0,0,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790912263.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,2.0,1,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790912378.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,walker2d,2.0,2,rq2_generalization\BC_SAC\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790912475.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,0.5,0,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790917609.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,0.5,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790918060.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,0.5,2,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790918520.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,2.0,0,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790918975.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,2.0,1,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790919409.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,ant,2.0,2,rq2_generalization\RLPD\ant-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790919860.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.5,0,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790829090.LAPTOP-UQB2MEFQ,1,1000,False
+RLPD,halfcheetah,0.5,0,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790830544.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.5,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790832167.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,0.5,2,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790832542.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,2.0,0,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790832916.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,2.0,1,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790833289.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,halfcheetah,2.0,2,rq2_generalization\RLPD\halfcheetah-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790833660.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.5,0,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790820425.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.5,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790822748.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,0.5,2,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790823332.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,2.0,0,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790824614.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,2.0,1,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790824973.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,hopper,2.0,2,rq2_generalization\RLPD\hopper-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790825388.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.5,0,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r0\tb\events.out.tfevents.1790912568.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.5,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r1\tb\events.out.tfevents.1790912884.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,0.5,2,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-0.5\r2\tb\events.out.tfevents.1790913216.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,2.0,0,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r0\tb\events.out.tfevents.1790913536.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,2.0,1,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r1\tb\events.out.tfevents.1790913857.LAPTOP-UQB2MEFQ,5,5000,False
+RLPD,walker2d,2.0,2,rq2_generalization\RLPD\walker2d-friction-srcdatatype-medium-2.0\r2\tb\events.out.tfevents.1790914180.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.5,0,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r0\tb\events.out.tfevents.1790915695.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.5,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r1\tb\events.out.tfevents.1790915828.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,0.5,2,rq2_generalization\SAC_TARGET_ONLY\ant-friction-0.5\r2\tb\events.out.tfevents.1790915963.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,2.0,0,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r0\tb\events.out.tfevents.1790916099.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,2.0,1,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r1\tb\events.out.tfevents.1790916223.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,ant,2.0,2,rq2_generalization\SAC_TARGET_ONLY\ant-friction-2.0\r2\tb\events.out.tfevents.1790916360.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.5,0,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r0\tb\events.out.tfevents.1790828539.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.5,0,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r0\tb\events.out.tfevents.1790829996.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.5,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r1\tb\events.out.tfevents.1790831059.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,0.5,2,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-0.5\r2\tb\events.out.tfevents.1790831161.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,2.0,0,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r0\tb\events.out.tfevents.1790830157.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,2.0,1,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r1\tb\events.out.tfevents.1790831268.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,halfcheetah,2.0,2,rq2_generalization\SAC_TARGET_ONLY\halfcheetah-friction-2.0\r2\tb\events.out.tfevents.1790831371.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.5,0,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r0\tb\events.out.tfevents.1790820242.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.5,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r1\tb\events.out.tfevents.1790821498.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,0.5,2,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-0.5\r2\tb\events.out.tfevents.1790823210.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,2.0,0,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r0\tb\events.out.tfevents.1790821243.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,2.0,1,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r1\tb\events.out.tfevents.1790823946.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,hopper,2.0,2,rq2_generalization\SAC_TARGET_ONLY\hopper-friction-2.0\r2\tb\events.out.tfevents.1790824058.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.5,0,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r0\tb\events.out.tfevents.1790911567.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.5,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r1\tb\events.out.tfevents.1790911629.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,0.5,2,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-0.5\r2\tb\events.out.tfevents.1790911698.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,2.0,0,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r0\tb\events.out.tfevents.1790911758.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,2.0,1,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r1\tb\events.out.tfevents.1790911815.LAPTOP-UQB2MEFQ,5,5000,False
+SAC Target Only,walker2d,2.0,2,rq2_generalization\SAC_TARGET_ONLY\walker2d-friction-2.0\r2\tb\events.out.tfevents.1790911876.LAPTOP-UQB2MEFQ,5,5000,False
+BC-SAC,hopper,0.1,0,test_runs\BC_SAC\hopper-friction-srcdatatype-medium-0.1\r0\tb\events.out.tfevents.1790564809.LAPTOP-UQB2MEFQ,1,10000,False

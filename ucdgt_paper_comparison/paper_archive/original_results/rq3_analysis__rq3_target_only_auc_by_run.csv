@@ -1,0 +1,13 @@
+environment,shift,algorithm,seed,normalized_auc
+halfcheetah-friction,0.1,SAC_TARGET_ONLY,0,0.2694101471453905
+halfcheetah-friction,0.1,SAC_TARGET_ONLY,1,0.08653960078954696
+halfcheetah-friction,0.1,SAC_TARGET_ONLY,2,0.9826539576053619
+halfcheetah-friction,0.5,SAC_TARGET_ONLY,0,0.423358865827322
+halfcheetah-friction,0.5,SAC_TARGET_ONLY,1,2.740195655822754
+halfcheetah-friction,0.5,SAC_TARGET_ONLY,2,0.5874533135443926
+halfcheetah-friction,2.0,SAC_TARGET_ONLY,0,0.7183354813605547
+halfcheetah-friction,2.0,SAC_TARGET_ONLY,1,1.1166898965835572
+halfcheetah-friction,2.0,SAC_TARGET_ONLY,2,0.6424211084842681
+halfcheetah-friction,5.0,SAC_TARGET_ONLY,0,1.8190264642238616
+halfcheetah-friction,5.0,SAC_TARGET_ONLY,1,-0.04443573653697967
+halfcheetah-friction,5.0,SAC_TARGET_ONLY,2,0.9763467192649842
